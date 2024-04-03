@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pet Adoption Log-in</title>
+  <link rel = "stylesheet" href = "{{ url_for('static', filename = 'styles.css') }}">
+</head>
+
+<body>
+  <form action = "{{url_for('login')}}">
+    <h1>Log-in</h1>
+    <label for = "username">Username:</label>
+    <input type = "text" id = "username" name = "username" required>
+    <label for = "password">Password:</label>
+    <input type = "password" id = "password" name = "password" required>
+    <input type = "submit" value = "Log-in">
+  </form>
+</body>
+
+</html>
