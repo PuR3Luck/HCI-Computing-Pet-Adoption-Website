@@ -1,27 +1,43 @@
 import pymongo
 from typing import Tuple, Callable
 from pymongo import MongoClient
+import sqlite3
 
+def mongo_wrapper(db_name, collection_name):
+    def decorator(func):
+        """First argument of the wrapped function should be the collection object"""
+        def wrapper(*args, **kwargs):
+            client = MongoClient('mongodb://localhost:27017/')
+            db = client[db_name]
+            collection = db[collection_name]
+            
+            # Running the wrapped function
+            try:
+                func(collection, *args, **kwargs) 
 
-def get_db(db_name:str):
-    client = MongoClient('mongodb://localhost:27017/')
-    db = client[db_name]
-    return db, client
+            # Closing the connection
+            finally:
+                client.close()
 
-def close_connection(client):
-    client.close()
+        return wrapper
+    return decorator
 
-def db_context_manager(db_name:str, func:Callable):
-    def wrapper(*args, **kwargs):
-        db, client = get_db(db_name)
-        try:
-            return func(db, *args, **kwargs)
-        finally:
-            close_connection(client)
-    return wrapper
+def sqlite3_wrapper(db_name):
+    def decorator(func):
+        """First argument of the wrapped function should be the cursor object"""
+        def wrapper(*args, **kwargs):
+            conn = sqlite3.connect(db_name)
+            conn.row_factory = sqlite3.Row
+            cur = conn.cursor()
+            
+            # Running the wrapped function
+            try:
+                func(cur, *args, **kwargs) 
 
-def adoption_db(func:Callable):
-    return db_context_manager('adoption', func)
+            # Closing the connection
+            finally:
+                conn.commit()
+                conn.close()
 
-def user_db(func:Callable):
-    return db_context_manager('user', func)
+        return wrapper
+    return decorator
