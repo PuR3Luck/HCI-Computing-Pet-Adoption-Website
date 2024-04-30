@@ -25,7 +25,6 @@ erDiagram
   USER || -- |{ PETS : "put up for adoption"
   PETS || -- |{ REQUESTS : "there can be multiple requests for each pet"
   PETS || -- || TYPE  : "have one type"
-  PETS || -- |{ PHOTOS : "have multiple"
 
   USER {
     int userid PK
@@ -43,17 +42,12 @@ erDiagram
     string writeup
     string sex
     int typeid FK
+    blob photos
   }
 
   TYPE {
     int typeid PK
     string type
-  }
-
-  PHOTOS {
-    int photoid PK
-    int petid FK
-    string photo "Don't use a string to store this" 
   }
 
   REQUESTS {
