@@ -17,3 +17,48 @@
   - Search with filters 
 - Allow owners of the pet to view the list of interested parties.
 - Have it not look like trash
+
+## Entity-Relationship Diagram
+```mermaid
+erDiagram
+  USER || -- |{ REQUESTS : "request to adopt"
+  USER || -- |{ PETS : "put up for adoption"
+  PETS || -- |{ REQUESTS : "there can be multiple requests for each pet"
+  PETS || -- || TYPE  : "have one type"
+  PETS || -- |{ PHOTOS : "have multiple"
+
+  USER {
+    int userid PK
+    string username
+    string password
+    int contactnumber
+  }
+
+  PETS {
+    int petid PK
+    int userid FK
+    string name
+    int age
+    int fee
+    string writeup
+    string sex
+    int typeid FK
+  }
+
+  TYPE {
+    int typeid PK
+    string type
+  }
+
+  PHOTOS {
+    int photoid PK
+    int petid FK
+    string photo "Don't use a string to store this" 
+  }
+
+  REQUESTS {
+    int requestid PK
+    int userid FK
+    int petid FK
+  }
+```
