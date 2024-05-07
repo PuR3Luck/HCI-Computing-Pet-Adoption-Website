@@ -38,7 +38,7 @@ erDiagram
     int userid FK
     string name
     int age
-    int fee
+    float fee
     string writeup
     string sex
     int typeid FK

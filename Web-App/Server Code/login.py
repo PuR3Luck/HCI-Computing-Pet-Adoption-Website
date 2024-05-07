@@ -30,7 +30,7 @@ def login(cursor, username:str, input_password:str) -> bool:
     return False
 
 @sql_wrapper
-def register(cursor,username:str, password:str) -> bool:
+def register(cursor,username:str, password:str, contact_number:int) -> bool:
   """
     Registers a new user in the database
 
@@ -38,6 +38,7 @@ def register(cursor,username:str, password:str) -> bool:
       cursor: sqlite3 cursor object
       username: str, the username of the new user
       password: str, the password of the new user
+      contact_number: int, the contact number of the new user
 
     Returns:
       bool, True if the registration is successful, False otherwise
@@ -45,7 +46,7 @@ def register(cursor,username:str, password:str) -> bool:
   if cursor.execute("SELECT COUNT(*) FROM USER WHERE username = ?", (username,)).fetchone() is not None: # Another user with the same username already exists
     return False
   
-  cursor.execute("INSERT INTO USER(username, password) VALUES (?, ?)", (username, password))
+  cursor.execute("INSERT INTO USER(username, password, contact_number) VALUES (?, ?)", (username, password, contact_number))
   
   return True
 
