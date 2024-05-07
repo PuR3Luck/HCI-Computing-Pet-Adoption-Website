@@ -103,4 +103,16 @@ def delete_account(cursor, username:str, password:str):
   else:
     # Password is correct, delete the user account
     # Must also delete all their pets and all their requests
+
+    # Get user_id
+    user_id = cursor.execute("SELECT id FROM USER WHERE username = ?", (username,)).fetchone()[0]
+
+    # Delete all pets associated with the user
+    cursor.execute("DELETE FROM PETS WHERE owner_id = ?", (user_id,))
+
+    # Delete all interest submissions by the user
+    cursor.execute("DELETE FROM INTERESTS WHERE user_id = ?", (user_id,))
+
+    # Delete the user account
+    cursor.execute("DELETE FROM USER WHERE username = ?", (username,))
     raise NotImplementedError

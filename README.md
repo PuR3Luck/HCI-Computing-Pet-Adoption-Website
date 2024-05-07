@@ -50,7 +50,7 @@ erDiagram
     string type
   }
 
-  REQUESTS {
+  INTERESTS {
     int requestid PK
     int userid FK
     int petid FK
