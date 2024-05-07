@@ -1,8 +1,5 @@
-import pymongo
 from typing import Callable
-from pymongo import MongoClient
 import sqlite3
-import functools
 
 def sql_wrapper():
     def decorator(func:Callable):
