@@ -1,4 +1,4 @@
-from db_utils import adoption_db
+from db_utils import sql_wrapper
 
 def submit_adoption_post():
   raise NotImplementedError

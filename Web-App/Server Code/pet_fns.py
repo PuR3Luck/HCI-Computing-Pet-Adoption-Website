@@ -27,7 +27,6 @@ def add_pet(cursor,owner_id:int, name:str, age:int, fee:float, writeup:str, sex:
   except sqlite3.Error as e:
     print(f"Error occurred while adding pet: {e}")
     return False
-  
 
 @sql_wrapper()
 def edit_pet(cursor, pet_id: int, name: str = None, age: int = None, fee: float = None, writeup: str = None, sex: str = None, type_id: int = None, photos=None):
