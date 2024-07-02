@@ -115,4 +115,5 @@ def delete_account(cursor, username:str, password:str):
 
     # Delete the user account
     cursor.execute("DELETE FROM USER WHERE username = ?", (username,))
-    raise NotImplementedError
+
+    return True
