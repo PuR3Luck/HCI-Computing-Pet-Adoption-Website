@@ -21,9 +21,9 @@
 ## Entity-Relationship Diagram
 ```mermaid
 erDiagram
-  USER || -- |{ REQUESTS : "request to adopt"
+  USER || -- |{ INTERESTS : "request to adopt"
   USER || -- |{ PETS : "put up for adoption"
-  PETS || -- |{ REQUESTS : "there can be multiple requests for each pet"
+  PETS || -- |{ INTERESTS : "there can be multiple requests for each pet"
   PETS || -- || TYPE  : "have one type"
 
   USER {

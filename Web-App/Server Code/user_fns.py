@@ -20,7 +20,7 @@ def login(cursor, username:str, input_password:str) -> bool:
   if password_tuple is None: # This means that the username was not found in the database
     return False
 
-  # User exists inside the
+  # User exists inside the database
 
   password = password_tuple[0]
 
