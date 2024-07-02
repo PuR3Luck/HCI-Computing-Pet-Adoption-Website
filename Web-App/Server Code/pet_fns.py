@@ -2,7 +2,7 @@ from db_utils import sql_wrapper
 import sqlite3
 
 @sql_wrapper()
-def add_pet(cursor,owner_id:int, name:str, age:int, fee:float, writeup:str, sex:str, type_id:int, photos):
+def add_pet(cursor: sqlite3.Cursor,owner_id:int, name:str, age:int, fee:float, writeup:str, sex:str, type_id:int, photos):
   """
     Adds a new pet to the database.
 
@@ -29,7 +29,7 @@ def add_pet(cursor,owner_id:int, name:str, age:int, fee:float, writeup:str, sex:
     return False
 
 @sql_wrapper()
-def edit_pet(cursor, pet_id: int, name: str = None, age: int = None, fee: float = None, writeup: str = None, sex: str = None, type_id: int = None, photos=None):
+def edit_pet(cursor: sqlite3.Cursor, pet_id: int, name: str = None, age: int = None, fee: float = None, writeup: str = None, sex: str = None, type_id: int = None, photos=None):
   """
   Edits an existing pet in the database.
   Args:
@@ -87,7 +87,7 @@ def edit_pet(cursor, pet_id: int, name: str = None, age: int = None, fee: float 
     return False
   
 @sql_wrapper()
-def delete_pet(cursor, pet_id: int) -> bool:
+def delete_pet(cursor: sqlite3.Cursor, pet_id: int) -> bool:
   """
   Deletes a pet from the database.
 

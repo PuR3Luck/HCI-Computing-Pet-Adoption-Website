@@ -1,7 +1,8 @@
 from db_utils import sql_wrapper
+import sqlite3
 
 @sql_wrapper
-def login(cursor, username:str, input_password:str) -> bool:
+def login(cursor:sqlite3.Cursor, username:str, input_password:str) -> bool:
   """
     Checks if login is successful
 
@@ -30,7 +31,7 @@ def login(cursor, username:str, input_password:str) -> bool:
     return False
 
 @sql_wrapper
-def register(cursor,username:str, password:str, contact_number:int) -> bool:
+def register(cursor: sqlite3.Cursor,username:str, password:str, contact_number:int) -> bool:
   """
     Registers a new user in the database
 
@@ -51,7 +52,7 @@ def register(cursor,username:str, password:str, contact_number:int) -> bool:
   return True
 
 @sql_wrapper
-def change_password(cursor,username:str, prev_password:str, new_password:str) -> bool:
+def change_password(cursor: sqlite3.Cursor,username:str, prev_password:str, new_password:str) -> bool:
   """
     Changes the password of the user after first validating that the user exists and the previous password is correct
 
@@ -80,7 +81,7 @@ def change_password(cursor,username:str, prev_password:str, new_password:str) ->
   return True
 
 @sql_wrapper
-def delete_account(cursor, username:str, password:str):
+def delete_account(cursor: sqlite3.Cursor, username:str, password:str):
   """
     Deletes the user account from the database after validating the username and password purges all instances where user is referenced
 
