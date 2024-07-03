@@ -7,33 +7,7 @@
 </head>
 
 <body>
-  {% if login_successful %}
-  <p>Login successful!</p>
-  {% elif first_time %}
-  <form action="{{url_for('login')}}" method="post">
-    <h1>Log-in</h1>
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required>
-
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required>
-
-    <input type="submit" value="Log-in">
-  </form>
-  { % else %}
-  <form action="{{url_for('login')}}" method="post">
-    <h1>Log-in</h1>
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required>
-
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required>
-
-    <input type="submit" value="Log-in">
-  </form>
-  <p>Incorrect username or password. Please try again.</p>
-  {% endif %}
-
+  
 </body>
 
 </html>

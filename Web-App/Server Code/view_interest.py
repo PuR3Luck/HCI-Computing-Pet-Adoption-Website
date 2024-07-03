@@ -2,7 +2,7 @@ from db_utils import sql_wrapper
 import sqlite3
 from typing import List, Tuple
 
-@sql_wrapper()
+@sql_wrapper
 def view_interest(cursor: sqlite3.Cursor, pet_id: int) -> Tuple[List[Tuple[str, int]],bool]:
   """
     View all parties interested in a pet.

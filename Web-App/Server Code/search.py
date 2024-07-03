@@ -14,7 +14,7 @@ class filter_properties:
   type: Optional[str]
 
 
-@sql_wrapper()
+@sql_wrapper
 def convert_type(cursor: sqlite3.Cursor, type: str) -> Tuple[Optional[int], bool]:
   """
   Converts the given string `type` to an integer representation.
@@ -37,7 +37,7 @@ def convert_type(cursor: sqlite3.Cursor, type: str) -> Tuple[Optional[int], bool
       print(f"Error occurred while converting type: {e}")
       return None, False
   
-@sql_wrapper()
+@sql_wrapper
 def search(cursor: sqlite3.Cursor, filters:filter_properties) -> List[int]:
  """
    Searches the database using the provided filter properties.

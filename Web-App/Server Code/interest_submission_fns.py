@@ -1,7 +1,7 @@
 from db_utils import sql_wrapper
 import sqlite3
 
-@sql_wrapper()
+@sql_wrapper
 def submit_interest(cursor: sqlite3.Cursor, user_id: int, pet_id: int) -> bool:
   """
     Submits an interest for a pet by a user.
@@ -21,7 +21,7 @@ def submit_interest(cursor: sqlite3.Cursor, user_id: int, pet_id: int) -> bool:
     print(f"Error occurred while submitting interest: {e}")
     return False
 
-@sql_wrapper()
+@sql_wrapper
 def delete_interest(cursor: sqlite3.Cursor, user_id: int, pet_id: int) -> bool:
   """
     Delete a submission of interest for a pet by a user.
