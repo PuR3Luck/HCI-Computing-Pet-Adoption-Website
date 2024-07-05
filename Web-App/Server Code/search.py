@@ -5,7 +5,7 @@ import sqlite3
 
 @dataclasses.dataclass
 class filter_properties:
-  from_users: Optional[List[int]]
+  from_users: Optional[List[int]] # List of user ids
   min_age: Optional[int]
   max_age: Optional[int]
   min_fee: Optional[int]
@@ -15,7 +15,7 @@ class filter_properties:
 
 
 @sql_wrapper
-def convert_type(cursor: sqlite3.Cursor, type: str) -> Tuple[Optional[int], bool]:
+def convert_type_str_to_id(cursor: sqlite3.Cursor, type: str) -> Tuple[Optional[int], bool]:
   """
   Converts the given string `type` to an integer representation.
 
@@ -77,7 +77,7 @@ def search(cursor: sqlite3.Cursor, filters:filter_properties) -> List[int]:
 
  # Type filter
  if filters.type is not None:
-    type_id, success = convert_type(cursor, filters.type)
+    type_id, success = convert_type_str_to_id(cursor, filters.type)
     if success:
         query += "type_id = " + str(type_id)
 
