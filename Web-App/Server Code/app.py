@@ -126,6 +126,7 @@ def delete_account_page():
 
 @app.route("/add_pet", methods = ["GET", "POST"]) # This is the add pet page
 def add_pet_page(): # NOTE: TO-DO
+  raise NotImplementedError
   if not session.get("logged_in"):
     return redirect("/login")
 
@@ -147,19 +148,98 @@ def add_pet_page(): # NOTE: TO-DO
     # Save photos in blob
 
 
-    if add_pet(owner_id = session.get("user_id"), name = name, age = age, fee = fee, writeup = writeup, sex = sex, type = type_id):
+    if add_pet(owner_id = session.get("user_id"), name = name, age = age, fee = fee, writeup = writeup, sex = sex, type = type_id, photos = photos_lst):
       return render_template("successful_pet_addition.html")
 
 
 @app.route("/edit_pet", methods = ["GET", "POST"]) # This is the edit pet page
+def edit_pet_page(pet_id): #NOTE: Check for how to handle photos
+  if not session.get("logged_in"):
+    return redirect("/login")
+  
+  if request.method == "GET":
+    # Get pet properties
+    con = sqlite3.connect('pets.db')
+    cur = con.cursor()
+    pet_properties = cur.execute("SELECT * FROM PETS WHERE pet_id = ?", (pet_id,)).fetchone()[0] 
+    con.close()
+
+    # Convert a tuple into a list
+    pet_properties_list = list(pet_properties)
+    web_pet_properties = pet_properties_list[2:-1]
+
+    return render_template("edit_pet.html", pet_properties = web_pet_properties)
+
+
+  if request.method == "POST":
+    name = request.form["name"]
+    age = request.form["age"]
+    fee = request.form["fee"]
+    writeup = request.form["writeup"]
+    sex = request.form["sex"]
+    type = request.form["type"]
+    photos = request.files
+    type_id = convert_type_str_to_id(type)
+    if edit_pet(pet_id, name, age, fee, writeup, sex, type_id, photos):
+      return redirect("/home")
+    else:
+      return render_template("error.html", error="Failed to edit pet")
 
 @app.route("/delete_pet", methods = ["GET", "POST"]) # This is the delete pet page
+def delete_pet_page(pet_id):
+  if not session.get("logged_in"):
+    return redirect("/login")
+
+  if request.method == "GET":
+    if delete_pet(pet_id):
+      return redirect("/home")
+    else:
+      return render_template("error.html", error = "Invalid pet id")
 
 @app.route("/search", methods = ["GET", "POST"]) # This is the search page
+def search_page():
+  if not session.get("logged_in"):
+    return redirect("/login")
+  
+  if request.method == "GET":
+    return render_template("search.html")
+  
+  if request.method == "POST":
+    search_properties =  filter_properties(
+      from_users = [request.form["from_users"]],
+      min_age = request.form["min_age"],
+      max_age = request.form["max_age"],
+      min_fee = request.form["min_fee"],
+      max_fee = request.form["max_fee"],
+      sex = request.form["sex"],
+      type = request.form["type"]
+    )
+
+    search_results = search(search_properties)
+
+    return render_template("search.html", pets = search_results)
 
 @app.route("/submit_interest", methods = ["GET", "POST"]) # This is the submit interest page
+def submit_interest_page(pet_id):
+  if not session.get("logged_in"):
+    return redirect("/login")
+
+  if request.method == "GET":
+    if submit_interest( session.get("user_id"), pet_id):
+      return redirect("/home")
+    else:
+      return render_template("error.html", error = "Invalid pet id")
 
 @app.route("/delete_interest", methods = ["GET", "POST"]) # This is the delete interest page
+def delete_interest_page(pet_id):
+  if not session.get("logged_in"):
+    return redirect("/login")
+  
+  if request.method == "GET":
+    if delete_interest(session.get("user_id"), pet_id):
+      return redirect("/home")
+    else:
+      return render_template("error.html", error = "Invalid pet id")
 
 @app.route("/view_interest_pet", methods = ["GET"]) # This is the view interest page
 def view_interest_page(pet_id):

@@ -8,7 +8,7 @@
 <body>
   <div class="login-container">
     <h1>Pet Adoption Login</h1>
-    <form action="{{ url_for('login') }}" method="POST">
+    <form action="{{ url_for('login_page') }}" method="POST">
       <div class="form-group">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
@@ -19,11 +19,15 @@
       </div>
       <button type="submit">Login</button>
     </form>
+    
     {% if error %}
     <div class="error-message">
       {{ error|safe }}
     </div>
     {% endif %}
+
+    <div class="register-link">
+      <a href="{{ url_for('register_page') }}">Don't have an account? Register here.</a>
   </div>
 </body>
 

@@ -90,4 +90,3 @@ def search(cursor: sqlite3.Cursor, filters:filter_properties) -> List[int]:
  pet_ids = [result[0] for result in results]
 
  return pet_ids
- 
