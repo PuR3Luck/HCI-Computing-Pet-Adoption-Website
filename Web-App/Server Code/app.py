@@ -15,10 +15,47 @@ app = Flask(__name__)
 # Set up the database
 con = sqlite3.connect('pets.db')
 cur = con.cursor()
-cur.execute("CREATE TABLE IF NOT EXISTS PETS (pet_id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER FOREIGN KEY, name TEXT, age INTEGER, fee FLOAT, writeup TEXT, sex TEXT, type_id INTEGER FOREIGN KEY, photos BLOB)")
-cur.execute("CREATE TABLE IF NOT EXISTS USERS (user_id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT, contact_number INTEGER)")
-cur.execute("CREATE TABLE IF NOT EXISTS TYPES (type_id INTEGER PRIMARY KEY AUTOINCREMENT, type TEXT)")
-cur.execute("CREATE TABLE IF NOT EXISTS INTERESTS (request_id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER FOREIGN KEY, pet_id INTEGER FOREIGN KEY)")
+cur.execute("""CREATE TABLE IF NOT EXISTS PETS (
+            pet_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+            user_id INTEGER, name TEXT, age INTEGER, 
+            fee FLOAT, 
+            writeup TEXT, 
+            sex TEXT, 
+            type_id INTEGER, 
+            photos BLOB,
+            FOREIGN KEY (user_id) REFERENCES USERS(user_id),
+            FOREIGN KEY (type_id) REFERENCES TYPES(type_id)
+            )""")
+
+cur.execute("""CREATE TABLE IF NOT EXISTS USER (
+            user_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+            username TEXT, 
+            password TEXT, 
+            contact_number INTEGER
+            )""")
+
+cur.execute("""CREATE TABLE IF NOT EXISTS TYPES (
+            type_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+            type TEXT
+            )""")
+
+cur.execute("""CREATE TABLE IF NOT EXISTS INTERESTS (
+            request_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+            user_id INTEGER, 
+            pet_id INTEGER,
+            FOREIGN KEY (user_id) REFERENCES USERS(user_id),
+            FOREIGN KEY (pet_id) REFERENCES PETS(pet_id)
+            )""")
+
+# Initialise type table
+if not cur.execute("SELECT * FROM TYPES").fetchone(): # Make sure that the table is empty
+  cur.execute("INSERT INTO TYPES (type) VALUES (?)", ("Dog",))
+  cur.execute("INSERT INTO TYPES (type) VALUES (?)", ("Cat",))
+  cur.execute("INSERT INTO TYPES (type) VALUES (?)", ("Bird",))
+  cur.execute("INSERT INTO TYPES (type) VALUES (?)", ("Fish",))
+  cur.execute("INSERT INTO TYPES (type) VALUES (?)", ("Reptile",))
+  cur.execute("INSERT INTO TYPES (type) VALUES (?)", ("Other",))
+
 con.commit()
 con.close()
 
