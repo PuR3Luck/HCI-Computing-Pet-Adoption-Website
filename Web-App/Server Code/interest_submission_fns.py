@@ -1,4 +1,4 @@
-from db_utils import sql_wrapper
+from decorators import sql_wrapper
 import sqlite3
 
 @sql_wrapper

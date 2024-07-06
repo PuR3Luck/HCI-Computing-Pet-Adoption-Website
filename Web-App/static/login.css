@@ -40,4 +40,5 @@ button {
 .error-message {
   color: #ff0000;
   font-size: xx-large;
+  font-weight: 600;
 }

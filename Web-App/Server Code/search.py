@@ -1,4 +1,4 @@
-from db_utils import sql_wrapper
+from decorators import sql_wrapper
 from typing import List, Tuple, Optional
 import dataclasses
 import sqlite3

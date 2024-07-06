@@ -9,8 +9,11 @@ from search import search, filter_properties, convert_type_str_to_id
 from interest_submission_fns import submit_interest, delete_interest
 from view_interest import view_interest
 
-app = Flask(__name__)
+app = Flask(__name__,template_folder='../templates', static_folder='../static')
 
+# Generate secret key for session
+SECRET_KEY = str(uuid.uuid1())
+app.secret_key = SECRET_KEY
 
 # Set up the database
 con = sqlite3.connect('pets.db')
@@ -59,8 +62,15 @@ if not cur.execute("SELECT * FROM TYPES").fetchone(): # Make sure that the table
 con.commit()
 con.close()
 
-# Set up the flask session
-session.get('logged_in', False)
+@app.before_request
+def before_request(): 
+  if request.endpoint == "login_page": # Prevent spamming user with logging in 
+    return
+
+  if session.get('logged_in') is None:
+    session['logged_in'] = False
+  if (session.get('logged_in') is False): # User has not logged in
+    return redirect("/login")
 
 
 @app.route('/', methods = ["GET"]) # This is the home page
@@ -75,7 +85,6 @@ def landing_page():
 def login_page():
   if request.method == "GET":
     return render_template("login.html")
-  
   if request.method == "POST":
     username = request.form["username"]
     password = request.form["password"]
@@ -117,9 +126,6 @@ def register_page():
 
 @app.route("/home", methods = ["GET"]) # This is the home page NOTE: Should show all pets
 def home_page():
-  if not session.get("logged_in"):
-    return redirect("/login")
-  
   if request.method == "GET":
     user_pets_filter_properties = filter_properties(from_users = [session.get("user_id")])
 
@@ -129,9 +135,6 @@ def home_page():
 
 @app.route("/change_password", methods = ["GET", "POST"]) # This is the change password page
 def change_password_page():
-  if not session.get("logged_in"):
-    return redirect("/login")
-
   if request.method == "GET":
     return render_template("change_password.html")
 
@@ -146,9 +149,6 @@ def change_password_page():
 
 @app.route("/delete_account", methods = ["GET", "POST"]) # This is the delete account page
 def delete_account_page():
-  if not session.get("logged_in"):
-    return redirect("/login")
-  
   if request.method == "GET":
     return render_template("delete_account.html")
   
@@ -164,8 +164,6 @@ def delete_account_page():
 @app.route("/add_pet", methods = ["GET", "POST"]) # This is the add pet page
 def add_pet_page(): # NOTE: TO-DO
   raise NotImplementedError
-  if not session.get("logged_in"):
-    return redirect("/login")
 
   if request.method == "GET":
     return render_template("add_pet.html")
@@ -191,9 +189,6 @@ def add_pet_page(): # NOTE: TO-DO
 
 @app.route("/edit_pet", methods = ["GET", "POST"]) # This is the edit pet page
 def edit_pet_page(pet_id): #NOTE: Check for how to handle photos
-  if not session.get("logged_in"):
-    return redirect("/login")
-  
   if request.method == "GET":
     # Get pet properties
     con = sqlite3.connect('pets.db')
@@ -224,9 +219,6 @@ def edit_pet_page(pet_id): #NOTE: Check for how to handle photos
 
 @app.route("/delete_pet", methods = ["GET", "POST"]) # This is the delete pet page
 def delete_pet_page(pet_id):
-  if not session.get("logged_in"):
-    return redirect("/login")
-
   if request.method == "GET":
     if delete_pet(pet_id):
       return redirect("/home")
@@ -235,9 +227,6 @@ def delete_pet_page(pet_id):
 
 @app.route("/search", methods = ["GET", "POST"]) # This is the search page
 def search_page():
-  if not session.get("logged_in"):
-    return redirect("/login")
-  
   if request.method == "GET":
     return render_template("search.html")
   
@@ -258,9 +247,6 @@ def search_page():
 
 @app.route("/submit_interest", methods = ["GET", "POST"]) # This is the submit interest page
 def submit_interest_page(pet_id):
-  if not session.get("logged_in"):
-    return redirect("/login")
-
   if request.method == "GET":
     if submit_interest( session.get("user_id"), pet_id):
       return redirect("/home")
@@ -269,9 +255,6 @@ def submit_interest_page(pet_id):
 
 @app.route("/delete_interest", methods = ["GET", "POST"]) # This is the delete interest page
 def delete_interest_page(pet_id):
-  if not session.get("logged_in"):
-    return redirect("/login")
-  
   if request.method == "GET":
     if delete_interest(session.get("user_id"), pet_id):
       return redirect("/home")
@@ -280,9 +263,6 @@ def delete_interest_page(pet_id):
 
 @app.route("/view_interest_pet", methods = ["GET"]) # This is the view interest page
 def view_interest_page(pet_id):
-  if not session.get("logged_in"):
-    return redirect("/login")
-  
   if request.method == "GET":
     interests = view_interest(pet_id)
     return render_template("view_interest.html", interests = interests)
