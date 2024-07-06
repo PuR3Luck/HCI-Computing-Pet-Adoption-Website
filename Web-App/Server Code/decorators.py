@@ -12,10 +12,7 @@ def sql_wrapper(func: Callable):
     # Running the wrapped function
     try:
       result = func(cur, *args, **kwargs)
-      print("committing...")
       conn.commit()
-      print("closing...")
-      conn.close()
       return result
     finally:
       conn.close()
@@ -36,7 +33,7 @@ print(f"New pet added with ID: {new_pet_id}")
 def login_required(func: Callable):
   @functools.wraps(func)
   def check_login(*args, **kwargs):
-    if (session.get('logged_in') is False): # User has not logged in
+    if (not session.get('logged_in')): # User has not logged in
       return redirect("/login")
     return func(*args, **kwargs)
 

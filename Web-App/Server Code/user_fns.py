@@ -44,10 +44,11 @@ def register(cursor: sqlite3.Cursor,username:str, password:str, contact_number:i
     Returns:
       bool, True if the registration is successful, False otherwise
   """ 
+
   if cursor.execute("SELECT * FROM USER WHERE username = ?", (username,)).fetchone() is not None: # Another user with the same username already exists
     return False
   
-  cursor.execute("INSERT INTO USER(username, password, contact_number) VALUES (?, ?, ?)", (username, password, contact_number))
+  cursor.execute("INSERT INTO USER (username, password, contact_number) VALUES (?, ?, ?)", (username, password, contact_number))
   return True
 
 @sql_wrapper

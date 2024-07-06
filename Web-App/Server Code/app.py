@@ -109,6 +109,11 @@ def register_page():
     password = request.form["password"]
     contact_number = request.form["contact_number"]
 
+    try:
+      contact_number = int(contact_number)
+    except TypeError:
+      return render_template("register.html", error = "Invalid contact number")
+
     if register(username, password, contact_number): # Successfully registered
       return redirect("/login")
     else:

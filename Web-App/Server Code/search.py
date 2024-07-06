@@ -5,13 +5,13 @@ import sqlite3
 
 @dataclasses.dataclass
 class filter_properties:
-  from_users: Optional[List[int]] # List of user ids
-  min_age: Optional[int]
-  max_age: Optional[int]
-  min_fee: Optional[int]
-  max_fee: Optional[int]
-  sex: Optional[str]
-  type: Optional[str]
+  from_users: Optional[List[int]] = None# List of user ids
+  min_age: Optional[int] = None
+  max_age: Optional[int] = None
+  min_fee: Optional[int] = None
+  max_fee: Optional[int] = None
+  sex: Optional[str] = None
+  type: Optional[str] = None
 
 
 @sql_wrapper
