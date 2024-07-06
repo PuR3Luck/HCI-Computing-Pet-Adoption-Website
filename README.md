@@ -42,7 +42,7 @@ erDiagram
     string writeup
     string sex
     int typeid FK
-    blob photos
+    string photos
   }
 
   TYPE {

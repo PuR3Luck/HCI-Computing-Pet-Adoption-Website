@@ -15,7 +15,7 @@ def add_pet(cursor: sqlite3.Cursor,owner_id:int, name:str, age:int, fee:float, w
       writeup: str, a description of the pet
       sex: str, the sex of the pet ('M' or 'F')
       type_id: int, the ID of the pet type (e.g. dog, cat, etc.)
-      photos: photos of the pet, to be stored as blob
+      photos: photos of the pet, storing the photo paths as comma-separated values
 
     Returns:
       bool, True if the pet was successfully added, False otherwise
@@ -41,7 +41,7 @@ def edit_pet(cursor: sqlite3.Cursor, pet_id: int, name: str = None, age: int = N
     writeup: str, the new description of the pet (optional)
     sex: str, the new sex of the pet ('M' or 'F', optional)
     type_id: int, the new ID of the pet type (optional)
-    photos: the new photos of the pet, to be stored as blob (optional)
+    photos: photos of the pet, storing the photo paths as comma-separated values (optional)
   Returns:
     bool, True if the pet was successfully edited, False otherwise
   """

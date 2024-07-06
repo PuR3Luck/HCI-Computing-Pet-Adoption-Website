@@ -8,6 +8,7 @@ from pet_fns import add_pet, edit_pet, delete_pet
 from search import search, filter_properties, convert_type_str_to_id
 from interest_submission_fns import submit_interest, delete_interest
 from view_interest import view_interest
+from decorators import login_required
 
 app = Flask(__name__,template_folder='../templates', static_folder='../static')
 
@@ -25,7 +26,7 @@ cur.execute("""CREATE TABLE IF NOT EXISTS PETS (
             writeup TEXT, 
             sex TEXT, 
             type_id INTEGER, 
-            photos BLOB,
+            photos TEXT,
             FOREIGN KEY (user_id) REFERENCES USERS(user_id),
             FOREIGN KEY (type_id) REFERENCES TYPES(type_id)
             )""")
@@ -61,16 +62,6 @@ if not cur.execute("SELECT * FROM TYPES").fetchone(): # Make sure that the table
 
 con.commit()
 con.close()
-
-@app.before_request
-def before_request(): 
-  if request.endpoint == "login_page": # Prevent spamming user with logging in 
-    return
-
-  if session.get('logged_in') is None:
-    session['logged_in'] = False
-  if (session.get('logged_in') is False): # User has not logged in
-    return redirect("/login")
 
 
 @app.route('/', methods = ["GET"]) # This is the home page
@@ -125,6 +116,7 @@ def register_page():
 
 
 @app.route("/home", methods = ["GET"]) # This is the home page NOTE: Should show all pets
+@login_required
 def home_page():
   if request.method == "GET":
     user_pets_filter_properties = filter_properties(from_users = [session.get("user_id")])
@@ -134,6 +126,7 @@ def home_page():
     return render_template("home.html", pets = user_pets)
 
 @app.route("/change_password", methods = ["GET", "POST"]) # This is the change password page
+@login_required
 def change_password_page():
   if request.method == "GET":
     return render_template("change_password.html")
@@ -148,6 +141,7 @@ def change_password_page():
       return render_template("change_password.html", error = "Invalid password")
 
 @app.route("/delete_account", methods = ["GET", "POST"]) # This is the delete account page
+@login_required
 def delete_account_page():
   if request.method == "GET":
     return render_template("delete_account.html")
@@ -162,8 +156,8 @@ def delete_account_page():
       return render_template("delete_account.html", error = "Invalid password")
 
 @app.route("/add_pet", methods = ["GET", "POST"]) # This is the add pet page
+@login_required
 def add_pet_page(): # NOTE: TO-DO
-  raise NotImplementedError
 
   if request.method == "GET":
     return render_template("add_pet.html")
@@ -188,6 +182,7 @@ def add_pet_page(): # NOTE: TO-DO
 
 
 @app.route("/edit_pet", methods = ["GET", "POST"]) # This is the edit pet page
+@login_required
 def edit_pet_page(pet_id): #NOTE: Check for how to handle photos
   if request.method == "GET":
     # Get pet properties
@@ -218,6 +213,7 @@ def edit_pet_page(pet_id): #NOTE: Check for how to handle photos
       return render_template("error.html", error="Failed to edit pet")
 
 @app.route("/delete_pet", methods = ["GET", "POST"]) # This is the delete pet page
+@login_required
 def delete_pet_page(pet_id):
   if request.method == "GET":
     if delete_pet(pet_id):
@@ -226,6 +222,7 @@ def delete_pet_page(pet_id):
       return render_template("error.html", error = "Invalid pet id")
 
 @app.route("/search", methods = ["GET", "POST"]) # This is the search page
+@login_required
 def search_page():
   if request.method == "GET":
     return render_template("search.html")
@@ -246,6 +243,7 @@ def search_page():
     return render_template("search.html", pets = search_results)
 
 @app.route("/submit_interest", methods = ["GET", "POST"]) # This is the submit interest page
+@login_required
 def submit_interest_page(pet_id):
   if request.method == "GET":
     if submit_interest( session.get("user_id"), pet_id):
@@ -254,6 +252,7 @@ def submit_interest_page(pet_id):
       return render_template("error.html", error = "Invalid pet id")
 
 @app.route("/delete_interest", methods = ["GET", "POST"]) # This is the delete interest page
+@login_required
 def delete_interest_page(pet_id):
   if request.method == "GET":
     if delete_interest(session.get("user_id"), pet_id):
@@ -262,11 +261,11 @@ def delete_interest_page(pet_id):
       return render_template("error.html", error = "Invalid pet id")
 
 @app.route("/view_interest_pet", methods = ["GET"]) # This is the view interest page
+@login_required
 def view_interest_page(pet_id):
   if request.method == "GET":
     interests = view_interest(pet_id)
     return render_template("view_interest.html", interests = interests)
-
 
 if __name__ == "__main__":
   app.run(debug=True)
