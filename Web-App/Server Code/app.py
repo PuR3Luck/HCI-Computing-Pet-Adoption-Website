@@ -17,7 +17,7 @@ SECRET_KEY = str(uuid.uuid1())
 app.secret_key = SECRET_KEY
 
 # Set up the database
-con = sqlite3.connect('pets.db')
+con = sqlite3.connect('pets.db',check_same_thread=False)
 cur = con.cursor()
 cur.execute("""CREATE TABLE IF NOT EXISTS PET (
             pet_id INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -62,7 +62,6 @@ if not cur.execute("SELECT * FROM TYPES").fetchone(): # Make sure that the table
 
 con.commit()
 con.close()
-
 
 @app.route('/', methods = ["GET"]) # This is the home page
 def landing_page():

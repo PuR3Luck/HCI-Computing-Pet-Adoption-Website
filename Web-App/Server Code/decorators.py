@@ -7,7 +7,7 @@ def sql_wrapper(func: Callable):
   """First argument of the wrapped function should be the cursor object"""
   @functools.wraps(func)
   def wrapper(*args, **kwargs):
-    conn = sqlite3.connect("pets.db")
+    conn = sqlite3.connect("pets.db",check_same_thread=False)
     cur = conn.cursor()
     
     # Running the wrapped function
