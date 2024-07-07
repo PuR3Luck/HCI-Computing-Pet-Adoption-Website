@@ -29,6 +29,10 @@
       {{ error|safe }}
     </div>
     {% endif %}
+    
+    <div class="return-to-login-link">
+      <a href="{{ url_for('login_page') }}">Return to login page.</a>
+    </div>
 
     </div>
   </body>

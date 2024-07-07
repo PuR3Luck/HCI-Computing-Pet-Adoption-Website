@@ -42,3 +42,7 @@ button {
   font-size: xx-large;
   font-weight: 600; 
 }
+
+.return-to-login-link {
+  padding: 10px;
+}

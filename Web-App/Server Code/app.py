@@ -19,7 +19,7 @@ app.secret_key = SECRET_KEY
 # Set up the database
 con = sqlite3.connect('pets.db')
 cur = con.cursor()
-cur.execute("""CREATE TABLE IF NOT EXISTS PETS (
+cur.execute("""CREATE TABLE IF NOT EXISTS PET (
             pet_id INTEGER PRIMARY KEY AUTOINCREMENT, 
             user_id INTEGER, name TEXT, age INTEGER, 
             fee FLOAT, 
@@ -38,7 +38,7 @@ cur.execute("""CREATE TABLE IF NOT EXISTS USER (
             contact_number INTEGER
             )""")
 
-cur.execute("""CREATE TABLE IF NOT EXISTS TYPES (
+cur.execute("""CREATE TABLE IF NOT EXISTS TYPE (
             type_id INTEGER PRIMARY KEY AUTOINCREMENT, 
             type TEXT
             )""")
@@ -86,8 +86,8 @@ def login_page():
       con = sqlite3.connect('pets.db')
       cur = con.cursor()
 
-      user_id = cur.execute("SELECT user_id FROM USERS WHERE username =?", (username,)).fetchone()[0]
-      username = cur.execute("SELECT username FROM USERS WHERE username =?", (username,)).fetchone()[0]
+      user_id = cur.execute("SELECT user_id FROM USER WHERE username =?", (username,)).fetchone()[0]
+      username = cur.execute("SELECT username FROM USER WHERE username =?", (username,)).fetchone()[0]
 
       session['user_id'] = user_id
       session['username'] = username
