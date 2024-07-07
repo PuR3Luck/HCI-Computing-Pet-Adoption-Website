@@ -13,7 +13,7 @@ def sql_wrapper(func: Callable):
     # Running the wrapped function
     try:
       result = func(cur, *args, **kwargs)
-      print("Function executed successfully")
+      #print("Function executed successfully")
       conn.commit()
       return result
     finally:
