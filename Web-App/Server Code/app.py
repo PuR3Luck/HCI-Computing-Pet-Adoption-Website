@@ -1,4 +1,3 @@
-import flask
 from flask import Flask, session, render_template, redirect, request, url_for
 import uuid
 from werkzeug.utils import secure_filename
