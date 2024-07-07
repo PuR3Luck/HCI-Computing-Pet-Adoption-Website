@@ -5,6 +5,7 @@ import functools
 
 def sql_wrapper(func: Callable):
   """First argument of the wrapped function should be the cursor object"""
+  @functools.wraps(func)
   def wrapper(*args, **kwargs):
     conn = sqlite3.connect("pets.db")
     cur = conn.cursor()
@@ -12,6 +13,7 @@ def sql_wrapper(func: Callable):
     # Running the wrapped function
     try:
       result = func(cur, *args, **kwargs)
+      print("Function executed successfully")
       conn.commit()
       return result
     finally:

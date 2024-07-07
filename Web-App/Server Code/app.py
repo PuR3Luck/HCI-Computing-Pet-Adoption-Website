@@ -38,7 +38,7 @@ cur.execute("""CREATE TABLE IF NOT EXISTS USER (
             contact_number INTEGER
             )""")
 
-cur.execute("""CREATE TABLE IF NOT EXISTS TYPE (
+cur.execute("""CREATE TABLE IF NOT EXISTS TYPES (
             type_id INTEGER PRIMARY KEY AUTOINCREMENT, 
             type TEXT
             )""")

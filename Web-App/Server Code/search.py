@@ -27,7 +27,7 @@ def convert_type_str_to_id(cursor: sqlite3.Cursor, type: str) -> Tuple[Optional[
     Tuple[Optional[int], bool]: A tuple containing the integer representation of the input `type` string and a boolean indicating success.
   """
   try:
-      cursor.execute("SELECT type_id FROM TYPE WHERE type =?", (type,))
+      cursor.execute("SELECT type_id FROM TYPES WHERE type =?", (type,))
 
       result = cursor.fetchone()
 
