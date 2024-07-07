@@ -75,6 +75,7 @@ def landing_page():
 @app.route("/login", methods = ["GET", "POST"]) # This is the login page
 def login_page():
   if request.method == "GET":
+    session['logged_in'] = False
     return render_template("login.html")
   if request.method == "POST":
     username = request.form["username"]
@@ -97,6 +98,7 @@ def login_page():
       return redirect("/home")
 
     else:
+      session['logged_in'] = False
       return render_template("login.html", error = "Invalid username or password")
     
 @app.route("/register", methods = ["GET", "POST"]) # This is the register page
