@@ -2,13 +2,85 @@
 
 <html>
 <style>
+  body {
+    display: flex;
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #f1f1f1;
+    color:#0f0f0f;
+    justify-content: center;
+    min-height: 100vh;
+    align-items: center;
+    font-size: larger;
+    font-weight: 600;
+  }
   
+  label {
+    padding: 10px;
+  }
+  
+  textarea {
+    vertical-align: top;
+  }
+  
+  .submit-button {
+    display: block;
+    margin: 0 auto;
+    border: 2px solid;
+    padding: 3px;
+    font-size: 16px;
+    border-color: #0f0f0f;
+    border-radius: 5%;
+  }
+
 </style>
 <head>
   <title>Put pet up for adoption</title>
   <link rel="stylesheet" href="{{ url_for('static', filename = 'add_pet.css') }}">
 </head>
 <body>
-  
+  <div class="add-pet-container">
+    <h1>Submit Information of pet</h1><br><br>
+    <form action="" method="POST" enctype="multipart/form-data">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <br><br>
+
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" required>
+        <br><br>
+
+        <label for="fee">Fee:</label>
+        <input type="number" id="fee" name="fee" step="0.01" required>
+        <br><br>
+
+        <label for="writeup">Write-up:</label>
+        <textarea id="writeup" name="writeup" rows="4" cols="50" required></textarea>
+        <br><br>
+
+        <label for="sex">Sex:</label>
+        <select id="sex" name="sex" required>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+        <br><br>
+
+        <label for="type">Type:</label>
+        <select id="type" name="type" required>
+          <option value="Dog">Dog</option>
+          <option value="Cat">Cat</option>
+          <option value="Bird">Bird</option>
+          <option value="Fish">Fish</option>
+          <option value="Reptile">Reptile</option>
+          <option value="Other">Other</option>
+        </select>
+        <br><br>
+
+        <label for="photos">Photos:</label>
+        <input type="file" id="photos" name="photos" multiple>
+        <br><br>
+
+        <input type="submit" value="Submit" class="submit-button">
+    </form>
+  </div>
 </body>
 </html>

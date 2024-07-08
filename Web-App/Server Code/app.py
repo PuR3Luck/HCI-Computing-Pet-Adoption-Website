@@ -25,7 +25,6 @@ cur.execute("""CREATE TABLE IF NOT EXISTS PET (
             writeup TEXT, 
             sex TEXT, 
             type_id INTEGER, 
-            photos TEXT,
             FOREIGN KEY (user_id) REFERENCES USERS(user_id),
             FOREIGN KEY (type_id) REFERENCES TYPES(type_id)
             )""")
@@ -50,6 +49,13 @@ cur.execute("""CREATE TABLE IF NOT EXISTS INTERESTS (
             FOREIGN KEY (pet_id) REFERENCES PETS(pet_id)
             )""")
 
+cur.execute("""CREATE TABLE IF NOT EXISTS PET_PHOTOS (
+            photo_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            pet_id INTEGER,
+            photo_blob BLOB,
+            FOREIGN KEY (pet_id) REFERENCES PET(pet_id)
+            )""")
+
 # Initialise type table
 if not cur.execute("SELECT * FROM TYPES").fetchone(): # Make sure that the table is empty
   cur.execute("INSERT INTO TYPES (type) VALUES (?)", ("Dog",))
@@ -58,6 +64,9 @@ if not cur.execute("SELECT * FROM TYPES").fetchone(): # Make sure that the table
   cur.execute("INSERT INTO TYPES (type) VALUES (?)", ("Fish",))
   cur.execute("INSERT INTO TYPES (type) VALUES (?)", ("Reptile",))
   cur.execute("INSERT INTO TYPES (type) VALUES (?)", ("Other",))
+
+if not cur.execute("SELECT * FROM USER").fetchall():
+  cur.execute("INSERT INTO USER (username, password, contact_number) VALUES ('notbowen', 'root', '123456789');")
 
 con.commit()
 con.close()
@@ -175,14 +184,11 @@ def add_pet_page(): # NOTE: TO-DO
     sex = request.form["sex"]
     type = request.form["type"]
 
-    type_id = convert_type_str_to_id(type)
+    type_id, _ = convert_type_str_to_id(type)
 
-    photos_lst = request.files
+    photos_lst = request.files.getlist("photos")
 
-    # Save photos in blob
-
-
-    if add_pet(owner_id = session.get("user_id"), name = name, age = age, fee = fee, writeup = writeup, sex = sex, type = type_id, photos = photos_lst):
+    if add_pet(owner_id = session.get("user_id"), name = name, age = age, fee = fee, writeup = writeup, sex = sex, type_id = type_id, photos = photos_lst):
       return render_template("successful_pet_addition.html")
 
 
@@ -271,6 +277,11 @@ def view_interest_page(pet_id):
   if request.method == "GET":
     interests = view_interest(pet_id)
     return render_template("view_interest.html", interests = interests)
+
+
+@app.route("/test_error", methods = ["GET"]) # This is the test error page
+def test_error_page():
+  return render_template("error.html", error = "This is a test error page")
 
 if __name__ == "__main__":
   app.run(debug=True)
