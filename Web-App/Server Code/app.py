@@ -251,7 +251,7 @@ def search_page():
 @login_required
 def submit_interest_page(pet_id):
   if request.method == "GET":
-    if submit_interest( session.get("user_id"), pet_id):
+    if submit_interest(session.get("user_id"), pet_id):
       return redirect("/home")
     else:
       return render_template("error.html", error = "Invalid pet id")
