@@ -1,6 +1,5 @@
 from flask import Flask, session, render_template, redirect, request, url_for
 import uuid
-from werkzeug.utils import secure_filename
 import sqlite3
 from user_fns import login, register, change_password, delete_account
 from pet_fns import add_pet, edit_pet, delete_pet
