@@ -3,7 +3,7 @@ import uuid
 import sqlite3
 from user_fns import login, register, change_password, delete_account
 from pet_fns import add_pet, edit_pet, delete_pet
-from search import search, filter_properties, convert_type_str_to_id
+from search import search, filter_properties, convert_type_str_to_id, pet_properties, fetch
 from interest_submission_fns import submit_interest, delete_interest
 from view_interest import view_interest
 from decorators import login_required
@@ -64,8 +64,10 @@ if not cur.execute("SELECT * FROM TYPES").fetchone(): # Make sure that the table
   cur.execute("INSERT INTO TYPES (type) VALUES (?)", ("Reptile",))
   cur.execute("INSERT INTO TYPES (type) VALUES (?)", ("Other",))
 
+'''
 if not cur.execute("SELECT * FROM USER").fetchall():
   cur.execute("INSERT INTO USER (username, password, contact_number) VALUES ('notbowen', 'root', '123456789');")
+'''
 
 con.commit()
 con.close()

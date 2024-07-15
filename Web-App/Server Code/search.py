@@ -13,6 +13,16 @@ class filter_properties:
   sex: Optional[str] = None
   type: Optional[str] = None
 
+@dataclasses.dataclass
+class pet_properties:
+   name: str
+   age: int
+   fee: float
+   writeup: str
+   sex: str
+   pet_type: str
+   photos: List[bytes]
+
 
 @sql_wrapper
 def convert_type_str_to_id(cursor: sqlite3.Cursor, type: str) -> Tuple[Optional[int], bool]:
@@ -36,6 +46,28 @@ def convert_type_str_to_id(cursor: sqlite3.Cursor, type: str) -> Tuple[Optional[
   except sqlite3.Error as e:
       print(f"Error occurred while converting type: {e}")
       return None, False
+  
+@sql_wrapper
+def convert_type_id_to_str(cursor: sqlite3.Cursor, type_id: int) -> Tuple[Optional[str], bool]:
+  """
+  Converts the given integer `type_id` to a string representation.
+
+  Args:
+    cursor (sqlite3.Cursor): The database cursor object.
+    type_id (int): The integer value to convert to a string.
+  """
+
+  try:
+      cursor.execute("SELECT type FROM TYPES WHERE type_id =?", (type_id,))
+
+      result = cursor.fetchone()
+
+      return result[0], True
+  
+  except sqlite3.Error as e:
+      print(f"Error occurred while converting type: {e}")
+      return None, False
+
   
 @sql_wrapper
 def search(cursor: sqlite3.Cursor, filters:filter_properties) -> List[int]:
@@ -90,3 +122,31 @@ def search(cursor: sqlite3.Cursor, filters:filter_properties) -> List[int]:
  pet_ids = [result[0] for result in results]
 
  return pet_ids
+
+@sql_wrapper
+def fetch(cursor: sqlite3.Cursor, pet_id: int) -> pet_properties:
+  pet_data = cursor.execute("SELECT name, age, fee, writeup, sex, type_id FROM PETS WHERE pet_id = ?", (pet_id,)).fetchone()
+  pet_photos = cursor.execute("SELECT photo_blob FROM PET_PHOTOS WHERE pet_id = ?", pet_id).fetchall()
+
+  print("[DEBUG] Pet Photos Type: " + type(pet_photos))
+  print("[DEBUG] Pet Photos:", pet_photos)
+
+  pet_name = pet_data[0]
+  pet_age = pet_data[1]
+  pet_fee = pet_data[2]
+  pet_writeup = pet_data[3]
+  pet_sex = pet_data[4]
+  pet_type_id = pet_data[5]
+  pet_type = convert_type_id_to_str(pet_type_id)[0]
+
+  return_value = pet_properties(
+    name=pet_name,
+    age=pet_age,
+    fee=pet_fee,
+    writeup=pet_writeup,
+    sex=pet_sex,
+    pet_type=pet_type,
+    photos=pet_photos
+  )
+
+  return return_value
