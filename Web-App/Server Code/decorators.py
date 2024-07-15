@@ -1,9 +1,9 @@
-from typing import callable
+from typing import Callable
 from flask import session, redirect
 import sqlite3
 import functools
 
-def sql_wrapper(func: callable):
+def sql_wrapper(func: Callable):
   """First argument of the wrapped function should be the cursor object"""
   @functools.wraps(func)
   def wrapper(*args, **kwargs):
@@ -41,7 +41,7 @@ new_pet_id = add_pet("Fluffy", 3, "Cat")
 print(f"New pet added with ID: {new_pet_id}")
 """
 
-def login_required(func:callable):
+def login_required(func:Callable):
   @functools.wraps(func)
   def check_login(*args, **kwargs):
     if (not session.get('logged_in')): # User has not logged in
