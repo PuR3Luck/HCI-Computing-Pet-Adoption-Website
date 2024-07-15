@@ -2,6 +2,7 @@ from decorators import sql_wrapper
 from typing import List, Tuple, Optional
 import dataclasses
 import sqlite3
+import base64
 
 @dataclasses.dataclass
 class filter_properties:
@@ -21,7 +22,7 @@ class pet_properties:
    writeup: str
    sex: str
    pet_type: str
-   photos: List[bytes]
+   photos: List[str]
 
 
 @sql_wrapper
@@ -125,11 +126,9 @@ def search(cursor: sqlite3.Cursor, filters:filter_properties) -> List[int]:
 
 @sql_wrapper
 def fetch(cursor: sqlite3.Cursor, pet_id: int) -> pet_properties:
-  pet_data = cursor.execute("SELECT name, age, fee, writeup, sex, type_id FROM PETS WHERE pet_id = ?", (pet_id,)).fetchone()
-  pet_photos = cursor.execute("SELECT photo_blob FROM PET_PHOTOS WHERE pet_id = ?", pet_id).fetchall()
-
-  print("[DEBUG] Pet Photos Type: " + type(pet_photos))
-  print("[DEBUG] Pet Photos:", pet_photos)
+  pet_data = cursor.execute("SELECT name, age, fee, writeup, sex, type_id FROM PET WHERE pet_id = ?", (pet_id,)).fetchone()
+  pet_photos = cursor.execute("SELECT photo_blob FROM PET_PHOTOS WHERE pet_id = ?", (pet_id, )).fetchall()
+  pet_photos = [base64.b64encode(photo[0]).decode("utf-8") for photo in pet_photos]
 
   pet_name = pet_data[0]
   pet_age = pet_data[1]

@@ -1,14 +1,103 @@
 <!DOCTYPE html>
-
-<html>
-<style>
-  
-</style>
+<html lang="en">
 <head>
-  <title>Pet Adoption Website Home-page</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename = 'home.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Adoption Website Home-page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .pet-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .pet-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 15px;
+            transition: transform 0.3s ease;
+        }
+        .pet-card:hover {
+            transform: translateY(-5px);
+        }
+        .pet-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .pet-info {
+            margin-top: 10px;
+        }
+        .pet-name {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #2c3e50;
+        }
+        .pet-details {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        .add-pet-btn {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #3498db;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .pet-writeup {
+          margin-top: 10px;
+          font-size: 0.9em;
+          color: #34495e;
+        }
+    </style>
 </head>
 <body>
-  
+    <div class="container">
+        <h1>Welcome, {{ username }}!</h1>
+        <a href="{{ url_for('add_pet_page') }}" class="add-pet-btn">Add a New Pet</a>
+        <div class="pet-grid">
+            {% for pet in pets %}
+            <div class="pet-card">
+                <img src="data:image/png;base64,{{ pet.photos[0] }}" alt="{{ pet.name }}">
+                <div class="pet-info">
+                  <div class="pet-name">{{ pet.name }}</div>
+                  <div class="pet-details">
+                      <p>Age: {{ pet.age }} years</p>
+                      <p>Type: {{ pet.pet_type }}</p>
+                      <p>Sex: {{ pet.sex | capitalize }}</p>
+                      <p>Fee: ${{ pet.fee }}</p>
+                  </div>
+                  <div class="pet-writeup">
+                      <p>{{ pet.writeup[:100] }}{% if pet.writeup|length > 100 %}...{% endif %}</p>
+                  </div>
+              </div>
+              </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 </body>
 </html>

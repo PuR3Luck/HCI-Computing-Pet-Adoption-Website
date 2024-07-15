@@ -45,7 +45,7 @@ def setup_db(cursor: sqlite3.Cursor):
               user_id INTEGER, 
               pet_id INTEGER,
               FOREIGN KEY (user_id) REFERENCES USERS(user_id),
-              FOREIGN KEY (pet_id) REFERENCES PETS(pet_id)
+              FOREIGN KEY (pet_id) REFERENCES PET(pet_id)
               )""")
 
   cursor.execute("""CREATE TABLE IF NOT EXISTS PET_PHOTOS (
@@ -71,7 +71,7 @@ if not cur.execute("SELECT * FROM USER").fetchall():
   cur.execute("INSERT INTO USER (username, password, contact_number) VALUES ('notbowen', 'root', '123456789');")
 '''
 
-@app.route('/', methods = ["GET"]) # This is the home page
+@app.route('/', methods = ["GET"])
 def landing_page():
   if session.get('logged_in'):
     return redirect("/home")
@@ -79,7 +79,7 @@ def landing_page():
   else:
     return redirect("/login")
   
-@app.route("/login", methods = ["GET", "POST"]) # This is the login page
+@app.route("/login", methods = ["GET", "POST"])
 def login_page():
   if request.method == "GET":
     session['logged_in'] = False
@@ -108,7 +108,7 @@ def login_page():
       session['logged_in'] = False
       return render_template("login.html", error = "Invalid username or password")
     
-@app.route("/register", methods = ["GET", "POST"]) # This is the register page
+@app.route("/register", methods = ["GET", "POST"])
 def register_page():
   if request.method == "GET":
     return render_template("register.html")
@@ -129,7 +129,7 @@ def register_page():
       return render_template("register.html", error = "An error has occured")
 
 
-@app.route("/home", methods = ["GET"]) # This is the home page NOTE: Should show all pets
+@app.route("/home", methods = ["GET"]) # This is the home page NOTE: Should show all pets TODO
 @login_required
 def home_page():
   if request.method == "GET":
@@ -137,9 +137,11 @@ def home_page():
 
     user_pets = search(user_pets_filter_properties)
 
-    return render_template("home.html", pets = user_pets)
+    list_of_pets = [fetch(pet_id) for pet_id in user_pets]
 
-@app.route("/change_password", methods = ["GET", "POST"]) # This is the change password page
+    return render_template("home.html", username = session.get("username"), pets = list_of_pets)
+
+@app.route("/change_password", methods = ["GET", "POST"]) # This is the change password page TODO
 @login_required
 def change_password_page():
   if request.method == "GET":
@@ -154,7 +156,7 @@ def change_password_page():
     else:
       return render_template("change_password.html", error = "Invalid password")
 
-@app.route("/delete_account", methods = ["GET", "POST"]) # This is the delete account page
+@app.route("/delete_account", methods = ["GET", "POST"]) # This is the delete account page  TODO
 @login_required
 def delete_account_page():
   if request.method == "GET":
@@ -169,9 +171,9 @@ def delete_account_page():
     else:
       return render_template("delete_account.html", error = "Invalid password")
 
-@app.route("/add_pet", methods = ["GET", "POST"]) # This is the add pet page
+@app.route("/add_pet", methods = ["GET", "POST"])
 @login_required
-def add_pet_page(): # NOTE: TO-DO
+def add_pet_page():
 
   if request.method == "GET":
     return render_template("add_pet.html")
@@ -192,18 +194,18 @@ def add_pet_page(): # NOTE: TO-DO
       return render_template("successful_pet_addition.html")
 
 
-@app.route("/edit_pet", methods = ["GET", "POST"]) # This is the edit pet page
+@app.route("/edit_pet", methods = ["GET", "POST"]) # This is the edit pet page TODO
 @login_required
 def edit_pet_page(pet_id): #NOTE: Check for how to handle photos
   if request.method == "GET":
     # Get pet properties
     con = sqlite3.connect('pets.db')
     cur = con.cursor()
-    pet_properties = cur.execute("SELECT * FROM PETS WHERE pet_id = ?", (pet_id,)).fetchone()[0] 
+    current_pet_properties = cur.execute("SELECT * FROM PET WHERE pet_id = ?", (pet_id,)).fetchone()[0] 
     con.close()
 
     # Convert a tuple into a list
-    pet_properties_list = list(pet_properties)
+    pet_properties_list = list(current_pet_properties)
     web_pet_properties = pet_properties_list[2:-1]
 
     return render_template("edit_pet.html", pet_properties = web_pet_properties)
@@ -223,7 +225,7 @@ def edit_pet_page(pet_id): #NOTE: Check for how to handle photos
     else:
       return render_template("error.html", error="Failed to edit pet")
 
-@app.route("/delete_pet", methods = ["GET", "POST"]) # This is the delete pet page
+@app.route("/delete_pet", methods = ["GET", "POST"]) # This is the delete pet page TODO
 @login_required
 def delete_pet_page(pet_id):
   if request.method == "GET":
@@ -232,7 +234,7 @@ def delete_pet_page(pet_id):
     else:
       return render_template("error.html", error = "Invalid pet id")
 
-@app.route("/search", methods = ["GET", "POST"]) # This is the search page
+@app.route("/search", methods = ["GET", "POST"]) # This is the search page TODO
 @login_required
 def search_page():
   if request.method == "GET":
@@ -253,7 +255,7 @@ def search_page():
 
     return render_template("search.html", pets = search_results)
 
-@app.route("/submit_interest", methods = ["GET", "POST"]) # This is the submit interest page
+@app.route("/submit_interest", methods = ["GET", "POST"]) # This is the submit interest page TODO
 @login_required
 def submit_interest_page(pet_id):
   if request.method == "GET":
@@ -262,7 +264,7 @@ def submit_interest_page(pet_id):
     else:
       return render_template("error.html", error = "Invalid pet id")
 
-@app.route("/delete_interest", methods = ["GET", "POST"]) # This is the delete interest page
+@app.route("/delete_interest", methods = ["GET", "POST"]) # This is the delete interest page TODO
 @login_required
 def delete_interest_page(pet_id):
   if request.method == "GET":
@@ -271,7 +273,7 @@ def delete_interest_page(pet_id):
     else:
       return render_template("error.html", error = "Invalid pet id")
 
-@app.route("/view_interest_pet", methods = ["GET"]) # This is the view interest page
+@app.route("/view_interest_pet", methods = ["GET"]) # This is the view interest page TODO
 @login_required
 def view_interest_page(pet_id):
   if request.method == "GET":

@@ -109,7 +109,7 @@ def delete_account(cursor: sqlite3.Cursor, username:str, password:str):
     user_id = cursor.execute("SELECT id FROM USER WHERE username = ?", (username,)).fetchone()[0]
 
     # Delete all pets associated with the user
-    cursor.execute("DELETE FROM PETS WHERE owner_id = ?", (user_id,))
+    cursor.execute("DELETE FROM PET WHERE owner_id = ?", (user_id,))
 
     # Delete all interest submissions by the user
     cursor.execute("DELETE FROM INTERESTS WHERE user_id = ?", (user_id,))

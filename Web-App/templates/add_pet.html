@@ -1,38 +1,6 @@
 <!DOCTYPE html>
 
 <html>
-<style>
-  body {
-    display: flex;
-    font-family: 'Courier New', Courier, monospace;
-    background-color: #f1f1f1;
-    color:#0f0f0f;
-    justify-content: center;
-    min-height: 100vh;
-    align-items: center;
-    font-size: larger;
-    font-weight: 600;
-  }
-  
-  label {
-    padding: 10px;
-  }
-  
-  textarea {
-    vertical-align: top;
-  }
-  
-  .submit-button {
-    display: block;
-    margin: 0 auto;
-    border: 2px solid;
-    padding: 3px;
-    font-size: 16px;
-    border-color: #0f0f0f;
-    border-radius: 5%;
-  }
-
-</style>
 <head>
   <title>Put pet up for adoption</title>
   <link rel="stylesheet" href="{{ url_for('static', filename = 'add_pet.css') }}">
@@ -40,7 +8,7 @@
 <body>
   <div class="add-pet-container">
     <h1>Submit Information of pet</h1><br><br>
-    
+
     <form action="" method="POST" enctype="multipart/form-data">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required>

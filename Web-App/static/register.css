@@ -23,8 +23,17 @@ input {
 }
 
 button {
-  border-radius: 5%;
   font-size: large;
+  display: block;
+  width: 200px;
+  margin: 20px auto;
+  padding: 10px;
+  background-color: #3498db;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
 }
 
 .register-container {
@@ -45,4 +54,16 @@ button {
 
 .return-to-login-link {
   padding: 10px;
+  display: block;
+  width: 200px;
+  margin: 20px auto;
+  padding: 10px;
+  background-color: #a4d0ec;
+  color: black;
+  text-align: center;
+  text-decoration: none;
+  border: 2px solid;
+  border-radius: 5px;
+  font-weight: bold;
+  border-color: #0f0f0f;
 }

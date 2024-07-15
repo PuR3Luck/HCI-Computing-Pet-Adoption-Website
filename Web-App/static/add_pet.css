@@ -1,0 +1,35 @@
+body {
+  display: flex;
+  font-family: 'Courier New', Courier, monospace;
+  background-color: #f1f1f1;
+  color:#0f0f0f;
+  justify-content: center;
+  min-height: 100vh;
+  align-items: center;
+  font-size: larger;
+  font-weight: 600;
+}
+
+label {
+  padding: 10px;
+}
+
+textarea {
+  vertical-align: top;
+}
+
+.submit-button {
+  display: block;
+  width: 200px;
+  margin: 20px auto;
+  border: 2px solid;
+  padding: 10px;
+  font-size: 16px;
+  border-color: #0f0f0f;
+  background-color: #3498db;
+  border-radius: 5%;
+  text-align: center;
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+}

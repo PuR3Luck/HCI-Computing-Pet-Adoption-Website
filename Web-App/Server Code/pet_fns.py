@@ -55,7 +55,7 @@ def edit_pet(cursor: sqlite3.Cursor, pet_id: int, name: str = None, age: int = N
     bool, True if the pet was successfully edited, False otherwise
   """
   try:
-    update_query = "UPDATE PETS SET "
+    update_query = "UPDATE PET SET "
     update_values = []
 
     if name is not None:
@@ -109,7 +109,7 @@ def delete_pet(cursor: sqlite3.Cursor, pet_id: int) -> bool:
   """
 
   try:
-    cursor.execute("DELETE FROM PETS WHERE pet_id = ?", (pet_id,))
+    cursor.execute("DELETE FROM PET WHERE pet_id = ?", (pet_id,))
     return True
   
   except sqlite3.Error as e:
