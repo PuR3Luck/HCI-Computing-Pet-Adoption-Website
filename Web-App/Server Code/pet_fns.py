@@ -29,7 +29,7 @@ def add_pet(cursor: sqlite3.Cursor,owner_id:int, name:str, age:int, fee:float, w
     for file in photos:
       if file and file.filename:  # Check if file is actually present
         file_data = file.read()  # Read the file data
-        cursor.execute("""INSERT INTO PET_PHOTOS (pet_id, photo_blob)VALUES (?, ?)""", 
+        cursor.execute("""INSERT INTO PET_PHOTOS (pet_id, photo_blob) VALUES (?, ?)""", 
                       (pet_id, file_data))
     
     return True

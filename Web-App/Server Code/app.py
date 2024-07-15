@@ -64,6 +64,8 @@ def setup_db(cursor: sqlite3.Cursor):
     cursor.execute("INSERT INTO TYPES (type) VALUES (?)", ("Reptile",))
     cursor.execute("INSERT INTO TYPES (type) VALUES (?)", ("Other",))
 
+setup_db()
+
 '''
 if not cur.execute("SELECT * FROM USER").fetchall():
   cur.execute("INSERT INTO USER (username, password, contact_number) VALUES ('notbowen', 'root', '123456789');")
