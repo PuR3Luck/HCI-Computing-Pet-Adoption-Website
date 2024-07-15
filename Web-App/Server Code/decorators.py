@@ -19,8 +19,13 @@ def sql_wrapper(func: Callable):
 
       print("Function committed successfully")
       return result
-    finally:
+    
+    except sqlite3.Error as e:
+      print(f"Error occurred while executing function: {e}")
       conn.rollback()
+      return None
+
+    finally:
       conn.close()
   return wrapper
 
