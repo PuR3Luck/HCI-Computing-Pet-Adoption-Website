@@ -6,7 +6,7 @@ from pet_fns import add_pet, edit_pet, delete_pet
 from search import search, filter_properties, convert_type_str_to_id, pet_properties, fetch
 from interest_submission_fns import submit_interest, delete_interest
 from view_interest import view_interest
-from decorators import login_required
+from decorators import login_required, sql_wrapper
 
 app = Flask(__name__,template_folder='../templates', static_folder='../static')
 
@@ -15,62 +15,59 @@ SECRET_KEY = str(uuid.uuid1())
 app.secret_key = SECRET_KEY
 
 # Set up the database
-con = sqlite3.connect('pets.db',check_same_thread=False)
-cur = con.cursor()
-cur.execute("""CREATE TABLE IF NOT EXISTS PET (
-            pet_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-            user_id INTEGER, name TEXT, age INTEGER, 
-            fee FLOAT, 
-            writeup TEXT, 
-            sex TEXT, 
-            type_id INTEGER, 
-            FOREIGN KEY (user_id) REFERENCES USERS(user_id),
-            FOREIGN KEY (type_id) REFERENCES TYPES(type_id)
-            )""")
+@sql_wrapper
+def setup_db(cursor: sqlite3.Cursor):
+  cursor.execute("""CREATE TABLE IF NOT EXISTS PET (
+              pet_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+              user_id INTEGER, name TEXT, age INTEGER, 
+              fee FLOAT, 
+              writeup TEXT, 
+              sex TEXT, 
+              type_id INTEGER, 
+              FOREIGN KEY (user_id) REFERENCES USERS(user_id),
+              FOREIGN KEY (type_id) REFERENCES TYPES(type_id)
+              )""")
 
-cur.execute("""CREATE TABLE IF NOT EXISTS USER (
-            user_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-            username TEXT, 
-            password TEXT, 
-            contact_number INTEGER
-            )""")
+  cursor.execute("""CREATE TABLE IF NOT EXISTS USER (
+              user_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+              username TEXT, 
+              password TEXT, 
+              contact_number INTEGER
+              )""")
 
-cur.execute("""CREATE TABLE IF NOT EXISTS TYPES (
-            type_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-            type TEXT
-            )""")
+  cursor.execute("""CREATE TABLE IF NOT EXISTS TYPES (
+              type_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+              type TEXT
+              )""")
 
-cur.execute("""CREATE TABLE IF NOT EXISTS INTERESTS (
-            request_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-            user_id INTEGER, 
-            pet_id INTEGER,
-            FOREIGN KEY (user_id) REFERENCES USERS(user_id),
-            FOREIGN KEY (pet_id) REFERENCES PETS(pet_id)
-            )""")
+  cursor.execute("""CREATE TABLE IF NOT EXISTS INTERESTS (
+              request_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+              user_id INTEGER, 
+              pet_id INTEGER,
+              FOREIGN KEY (user_id) REFERENCES USERS(user_id),
+              FOREIGN KEY (pet_id) REFERENCES PETS(pet_id)
+              )""")
 
-cur.execute("""CREATE TABLE IF NOT EXISTS PET_PHOTOS (
-            photo_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            pet_id INTEGER,
-            photo_blob BLOB,
-            FOREIGN KEY (pet_id) REFERENCES PET(pet_id)
-            )""")
+  cursor.execute("""CREATE TABLE IF NOT EXISTS PET_PHOTOS (
+              photo_id INTEGER PRIMARY KEY AUTOINCREMENT,
+              pet_id INTEGER,
+              photo_blob BLOB,
+              FOREIGN KEY (pet_id) REFERENCES PET(pet_id)
+              )""")
 
-# Initialise type table
-if not cur.execute("SELECT * FROM TYPES").fetchone(): # Make sure that the table is empty
-  cur.execute("INSERT INTO TYPES (type) VALUES (?)", ("Dog",))
-  cur.execute("INSERT INTO TYPES (type) VALUES (?)", ("Cat",))
-  cur.execute("INSERT INTO TYPES (type) VALUES (?)", ("Bird",))
-  cur.execute("INSERT INTO TYPES (type) VALUES (?)", ("Fish",))
-  cur.execute("INSERT INTO TYPES (type) VALUES (?)", ("Reptile",))
-  cur.execute("INSERT INTO TYPES (type) VALUES (?)", ("Other",))
+  # Initialise type table
+  if not cursor.execute("SELECT * FROM TYPES").fetchone(): # Make sure that the table is empty
+    cursor.execute("INSERT INTO TYPES (type) VALUES (?)", ("Dog",))
+    cursor.execute("INSERT INTO TYPES (type) VALUES (?)", ("Cat",))
+    cursor.execute("INSERT INTO TYPES (type) VALUES (?)", ("Bird",))
+    cursor.execute("INSERT INTO TYPES (type) VALUES (?)", ("Fish",))
+    cursor.execute("INSERT INTO TYPES (type) VALUES (?)", ("Reptile",))
+    cursor.execute("INSERT INTO TYPES (type) VALUES (?)", ("Other",))
 
 '''
 if not cur.execute("SELECT * FROM USER").fetchall():
   cur.execute("INSERT INTO USER (username, password, contact_number) VALUES ('notbowen', 'root', '123456789');")
 '''
-
-con.commit()
-con.close()
 
 @app.route('/', methods = ["GET"]) # This is the home page
 def landing_page():
@@ -127,7 +124,7 @@ def register_page():
     if register(username, password, contact_number): # Successfully registered
       return redirect("/login")
     else:
-      return render_template("register.html", error = "Username already exists")
+      return render_template("register.html", error = "An error has occured")
 
 
 @app.route("/home", methods = ["GET"]) # This is the home page NOTE: Should show all pets
