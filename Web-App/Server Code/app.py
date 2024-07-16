@@ -7,6 +7,7 @@ from search import search, filter_properties, convert_type_str_to_id, pet_proper
 from interest_submission_fns import submit_interest, delete_interest
 from view_interest import view_interest
 from decorators import login_required, sql_wrapper
+import time
 
 app = Flask(__name__,template_folder='../templates', static_folder='../static')
 
@@ -191,8 +192,11 @@ def add_pet_page():
     photos_lst = request.files.getlist("photos")
 
     if add_pet(owner_id = session.get("user_id"), name = name, age = age, fee = fee, writeup = writeup, sex = sex, type_id = type_id, photos = photos_lst):
-      return render_template("successful_pet_addition.html")
-
+      return redirect("/home")
+    else:
+      render_template("add_pet.html", error = "An error has occured")
+      time.sleep(3)
+      redirect("/home")
 
 @app.route("/edit_pet", methods = ["GET", "POST"]) # This is the edit pet page TODO
 @login_required
