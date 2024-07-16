@@ -1,39 +1,42 @@
 <!DOCTYPE html>
 
+<html>
 <head>
   <title>Pet Adoption Registration Page</title>
   <link rel="stylesheet" href="{{ url_for('static', filename = 'register.css') }}">
 </head>
 
-  <body>
-    <div class="register-container">
-      <h1>Register for Pet Adoption Website</h1>
-      <form action="{{ url_for('register_page') }}" method="POST">
-        <div class="form-group">
-          <label for="username">Username:</label>
-          <input type="text" id="username" name="username" required>
-        </div>
-        <div class="form-group">
-          <label for="password">Password:</label>
-          <input type="password" id="password" name="password" required>
-        </div>
-        <div class="form-group">
-          <label for="contact_number">Contact Number:</label>
-          <input type="number" id="contact_number" name="contact_number" required>
-        </div>
-        <button type="submit">Register</button>
-      </form>
-      
+<body>
+  <div class="register-container">
+    <h1>Register for Pet Adoption Website</h1>
+    <form action="{{ url_for('register_page') }}" method="POST">
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+
+      <div class="form-group">
+        <label for="contact_number">Contact Number:</label>
+        <input type="number" id="contact_number" name="contact_number" required>
+      </div>
+      <button type="submit">Register</button>
+    </form>
+    
     {% if error %}
     <div class="error-message">
       <p>{{ error|safe }}</p>
     </div>
     {% endif %}
-    
+  
     <div>
       <a href="{{ url_for('login_page') }}" class="return-to-login-link">Return to login page.</a>
     </div>
+  </div>
+</body>
 
-    </div>
-  </body>
 </html>
