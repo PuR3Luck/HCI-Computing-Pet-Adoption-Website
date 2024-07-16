@@ -16,6 +16,7 @@ class filter_properties:
 
 @dataclasses.dataclass
 class pet_properties:
+   id: int
    name: str
    age: int
    fee: float
@@ -139,6 +140,7 @@ def fetch(cursor: sqlite3.Cursor, pet_id: int) -> pet_properties:
   pet_type = convert_type_id_to_str(pet_type_id)[0]
 
   return_value = pet_properties(
+    id=pet_id,
     name=pet_name,
     age=pet_age,
     fee=pet_fee,
