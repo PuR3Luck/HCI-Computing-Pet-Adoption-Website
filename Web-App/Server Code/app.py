@@ -198,7 +198,7 @@ def add_pet_page():
       time.sleep(3)
       redirect("/home")
 
-@app.route("/edit_pet", methods = ["GET", "POST"]) # This is the edit pet page TODO
+@app.route("/edit_pet/<int:pet_id>", methods = ["GET", "POST"]) # This is the edit pet page TODO
 @login_required
 def edit_pet_page(pet_id): #NOTE: Check for how to handle photos
   if request.method == "GET":
@@ -229,7 +229,7 @@ def edit_pet_page(pet_id): #NOTE: Check for how to handle photos
     else:
       return render_template("error.html", error="Failed to edit pet")
 
-@app.route("/delete_pet", methods = ["GET", "POST"]) # This is the delete pet page TODO
+@app.route("/delete_pet/<int:pet_id>", methods = ["GET", "POST"]) # This is the delete pet page TODO
 @login_required
 def delete_pet_page(pet_id):
   if request.method == "GET":
@@ -259,7 +259,7 @@ def search_page():
 
     return render_template("search.html", pets = search_results)
 
-@app.route("/submit_interest", methods = ["GET", "POST"]) # This is the submit interest page TODO
+@app.route("/submit_interest/<int:pet_id>", methods = ["GET", "POST"]) # This is the submit interest page TODO
 @login_required
 def submit_interest_page(pet_id):
   if request.method == "GET":
@@ -268,7 +268,7 @@ def submit_interest_page(pet_id):
     else:
       return render_template("error.html", error = "Invalid pet id")
 
-@app.route("/delete_interest", methods = ["GET", "POST"]) # This is the delete interest page TODO
+@app.route("/delete_interest/<int:pet_id>", methods = ["GET", "POST"]) # This is the delete interest page TODO
 @login_required
 def delete_interest_page(pet_id):
   if request.method == "GET":
@@ -277,7 +277,7 @@ def delete_interest_page(pet_id):
     else:
       return render_template("error.html", error = "Invalid pet id")
 
-@app.route("/view_interest_pet", methods = ["GET"]) # This is the view interest page TODO
+@app.route("/view_interest_pet/<int:pet_id>", methods = ["GET"]) # This is the view interest page TODO
 @login_required
 def view_interest_page(pet_id):
   if request.method == "GET":
