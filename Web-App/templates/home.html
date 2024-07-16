@@ -20,6 +20,7 @@
             color: #333;
             text-align: center;
         }
+
         .pet-grid {
             display: flex;
             flex-direction: row;
@@ -31,14 +32,16 @@
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             padding: 10px;
-            transition: transform 0.3s ease;
             width: 250px;
         }
+
         .pet-card:hover {
             transform: translateY(-5px);
             transform: scale(1.03);
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
         }
+
         .pet-card img {
             width: 200px;
             height: 200px;
@@ -57,10 +60,17 @@
             color: #7f8c8d;
             font-size: 0.9em;
         }
+
+        .pet-writeup {
+          margin-top: 10px;
+          font-size: 0.9em;
+          color: #34495e;
+        }
+
         .add-pet-btn {
             display: block;
             width: 200px;
-            margin: 20px auto;
+            margin: 10px auto;
             padding: 10px;
             background-color: #3498db;
             color: white;
@@ -72,17 +82,57 @@
             border-color: #0f0f0f;
         }
 
-        .pet-writeup {
-          margin-top: 10px;
-          font-size: 0.9em;
-          color: #34495e;
+        .delete-pet-btn {
+            display: block;
+            width: 200px;
+            margin: 10px auto;
+            padding: 10px;
+            background-color: #3498db;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            border: 2px solid;
+            border-color: #0f0f0f;
+        }
+
+        .search-pet-btn {
+            display: block;
+            width: 200px;
+            margin: 10px auto;
+            padding: 10px;
+            background-color: #3498db;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            border: 2px solid;
+            border-color: #0f0f0f;
+        }
+
+        .btn-container {
+            max-width: 800px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 5px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Welcome, {{ username }}!</h1>
-        <a href="{{ url_for('add_pet_page') }}" class="add-pet-btn">Add a New Pet</a>
+        <div class="btn-container">
+            <a href="{{ url_for('add_pet_page') }}" class="add-pet-btn">Add a New Pet</a>
+            <a href="{{ url_for('delete_pet_page') }}" class="delete-pet-btn">Delete a Pet</a> 
+            <a href="{{ url_for('search_page')}}" class="search-pet-btn">Search for a Pet</a>
+        </div>
+         
         <div class="pet-grid">
             {% for pet in pets %}
             <div class="pet-card">
