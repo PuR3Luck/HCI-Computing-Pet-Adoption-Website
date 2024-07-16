@@ -115,10 +115,15 @@
             border-color: #0f0f0f;
             background-color: #3498db;
             border-radius: 3px;
-            padding: 2px;
+            padding: 6px 12px;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
         }
 
-        .edit-pet-btn {
+        .edit-pet-btn, .delete-pet-btn {
+            display: inline-block;
+            width: 90%;
             font-weight: bold;
             font-size: medium;
             color: white;
@@ -127,22 +132,11 @@
             border: 2px solid;
             border-color: #5f5f5f;
             border-radius: 3px;
-            padding: 2px;
-            margin: 1px;
+            padding: 1px;
+            margin: 3px 0;
+            width: 100%;
         }
 
-        .delete-pet-btn {
-            font-weight: bold;
-            font-size: medium;
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            border: 2px solid;
-            border-color: #5f5f5f;
-            border-radius: 3px;
-            padding: 2px;
-            margin: 1px;
-        }
     </style>
 </head>
 <body>
@@ -173,6 +167,8 @@
 
                   <div class="pet-btn-container">
                     <a href="{{ url_for('edit_pet_page', pet_id=pet.id) }}" class="edit-pet-btn">Edit pet details</a>
+                    
+                    <br>
 
                     <a href="{{ url_for('delete_pet_page', pet_id=pet.id) }}" class="delete-pet-btn">Delete pet</a>
                   </div>
