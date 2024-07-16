@@ -53,17 +53,17 @@ button {
 }
 
 .return-to-login-link {
-  padding: 10px;
+  font-size: large;
   display: block;
   width: 200px;
   margin: 20px auto;
   padding: 10px;
-  background-color: #a4d0ec;
-  color: black;
+  background-color: #3498db;
+  color: white;
   text-align: center;
   text-decoration: none;
-  border: 2px solid;
   border-radius: 5px;
   font-weight: bold;
+  border: 2px solid;
   border-color: #0f0f0f;
 }

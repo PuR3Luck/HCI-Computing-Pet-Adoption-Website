@@ -122,6 +122,24 @@
             border-radius: 5px;
             padding: 5px;
         }
+
+        .edit-pet-btn-container {
+            display: inline-block;
+            margin: 5px auto;
+            border: 1px solid;
+            border-color: #0f0f0f;
+            background-color: #3498db;
+            border-radius: 3px;
+            padding: 3px;
+        }
+
+        .edit-pet-btn {
+            font-weight: bold;
+            font-size: medium;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
@@ -149,6 +167,10 @@
 
                   <div class="pet-writeup">
                       <p>{{ pet.writeup[:100] }}{% if pet.writeup|length > 100 %}...{% endif %}</p>
+                  </div>
+
+                  <div class="edit-pet-btn-container">
+                    <a href="{{ url_for('edit_pet_page', pet_id=pet.id) }}" class="edit-pet-btn">Edit pet details</a>
                   </div>
               </div>
             </div>
