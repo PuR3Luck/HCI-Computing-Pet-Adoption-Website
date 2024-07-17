@@ -111,6 +111,8 @@ def delete_pet(cursor: sqlite3.Cursor, pet_id: int) -> bool:
 
   try:
     cursor.execute("DELETE FROM PET WHERE pet_id = ?", (pet_id,))
+    cursor.execute("DELETE FROM PET_PHOTOS WHERE pet_id = ?", (pet_id,))
+    cursor.execute("DELETE FROM INTERESTS WHERE pet_id = ?", (pet_id,))
     return True
   
   except sqlite3.Error as e:

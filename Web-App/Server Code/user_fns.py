@@ -1,5 +1,6 @@
 from decorators import sql_wrapper
 import sqlite3
+from pet_fns import delete_pet
 
 @sql_wrapper
 def login(cursor:sqlite3.Cursor, username:str, input_password:str) -> bool:
@@ -109,7 +110,10 @@ def delete_account(cursor: sqlite3.Cursor, username:str, password:str):
     user_id = cursor.execute("SELECT id FROM USER WHERE username = ?", (username,)).fetchone()[0]
 
     # Delete all pets associated with the user
-    cursor.execute("DELETE FROM PET WHERE owner_id = ?", (user_id,))
+    pet_ids = cursor.execute("SELECT pet_id FROM PET WHERE user_id = ?", (user_id,)).fetchall()
+
+    for pet_id in pet_ids:
+      delete_pet(pet_id[0])
 
     # Delete all interest submissions by the user
     cursor.execute("DELETE FROM INTERESTS WHERE user_id = ?", (user_id,))
