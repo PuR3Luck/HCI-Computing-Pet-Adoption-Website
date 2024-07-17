@@ -231,7 +231,9 @@ def delete_pet_page(pet_id):
     if delete_pet(pet_id):
       return redirect("/home")
     else:
-      return render_template("error.html", error = "Invalid pet id")
+      render_template("error.html", error = "Invalid pet id")
+      time.sleep(3)
+      return redirect("/home")
 
 @app.route("/search", methods = ["GET", "POST"]) # This is the search page TODO
 @login_required
