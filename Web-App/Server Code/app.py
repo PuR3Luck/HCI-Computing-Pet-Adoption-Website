@@ -224,7 +224,7 @@ def edit_pet_page(pet_id): #NOTE: Check for how to handle photos
       time.sleep(3)
       return redirect("/home")
 
-@app.route("/delete_pet/<int:pet_id>", methods = ["GET", "POST"]) # This is the delete pet page TODO
+@app.route("/delete_pet/<int:pet_id>", methods = ["GET", "POST"]) # This is the delete pet page
 @login_required
 def delete_pet_page(pet_id):
   if request.method == "GET":
