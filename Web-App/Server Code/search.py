@@ -127,6 +127,16 @@ def search(cursor: sqlite3.Cursor, filters:filter_properties) -> List[int]:
 
 @sql_wrapper
 def fetch(cursor: sqlite3.Cursor, pet_id: int) -> pet_properties:
+  """
+    Fetches the pet properties for the given pet ID.
+
+    Args:
+      cursor (sqlite3.Cursor): The database cursor object
+      pet_id (int): The ID of the pet to fetch.
+
+    Returns:
+        pet_properties: A dataclass containing the pet properties.
+  """
   pet_data = cursor.execute("SELECT name, age, fee, writeup, sex, type_id FROM PET WHERE pet_id = ?", (pet_id,)).fetchone()
   pet_photos = cursor.execute("SELECT photo_blob FROM PET_PHOTOS WHERE pet_id = ?", (pet_id, )).fetchall()
   pet_photos = [base64.b64encode(photo[0]).decode("utf-8") for photo in pet_photos]

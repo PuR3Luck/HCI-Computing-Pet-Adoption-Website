@@ -82,6 +82,7 @@ def edit_pet(cursor: sqlite3.Cursor, pet_id: int, name: str = None, age: int = N
       update_query += "type_id = ?, "
       update_values.append(type_id)
 
+    #NOTE: Photo updating currently does not work
     if photos is not None:
       update_query += "photos = ?, "
       update_values.append(photos)

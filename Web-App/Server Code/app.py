@@ -203,16 +203,9 @@ def add_pet_page():
 def edit_pet_page(pet_id): #NOTE: Check for how to handle photos
   if request.method == "GET":
     # Get pet properties
-    con = sqlite3.connect('pets.db')
-    cur = con.cursor()
-    current_pet_properties = cur.execute("SELECT * FROM PET WHERE pet_id = ?", (pet_id,)).fetchone()[0] 
-    con.close()
+    pet_properties = fetch(pet_id)
 
-    # Convert a tuple into a list
-    pet_properties_list = list(current_pet_properties)
-    web_pet_properties = pet_properties_list[2:-1]
-
-    return render_template("edit_pet.html", pet_properties = web_pet_properties)
+    return render_template("edit_pet.html", pet_properties = pet_properties)
 
 
   if request.method == "POST":
@@ -227,7 +220,9 @@ def edit_pet_page(pet_id): #NOTE: Check for how to handle photos
     if edit_pet(pet_id, name, age, fee, writeup, sex, type_id, photos):
       return redirect("/home")
     else:
-      return render_template("error.html", error="Failed to edit pet")
+      render_template("error.html", error="Failed to edit pet")
+      time.sleep(3)
+      return redirect("/home")
 
 @app.route("/delete_pet/<int:pet_id>", methods = ["GET", "POST"]) # This is the delete pet page TODO
 @login_required
