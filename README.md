@@ -57,7 +57,7 @@ erDiagram
   }
 
   PET_PHOTOS {
-    int petid PK FK
+    int petid PK
     blob photos
   }
 ```
