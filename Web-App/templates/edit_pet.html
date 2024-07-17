@@ -98,6 +98,9 @@
       </div>
       
       <div class="picture-box">
+        {% for photo in pet_properties.photos %}
+        <img src="data:image/png;base64,{{ photo }}" alt="{{ pet_properties.name }}" width="200px" height="200px">
+        {% endfor %}
         <label for="photos">Photos:</label>
         <input type="file" id="photos" name="photos" accept="image/*" multiple>
       </div>
