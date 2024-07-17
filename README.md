@@ -25,6 +25,7 @@ erDiagram
   USER || -- |{ PETS : "put up for adoption"
   PETS || -- |{ INTERESTS : "there can be multiple requests for each pet"
   PETS || -- || TYPE  : "have one type"
+  PETS || -- |{ PET_PHOTOS : "photos of pets"
 
   USER {
     int userid PK
@@ -42,7 +43,6 @@ erDiagram
     string writeup
     string sex
     int typeid FK
-    string photos
   }
 
   TYPE {
@@ -54,5 +54,10 @@ erDiagram
     int requestid PK
     int userid FK
     int petid FK
+  }
+
+  PET_PHOTOS {
+    int petid PK FK
+    blob photos
   }
 ```
