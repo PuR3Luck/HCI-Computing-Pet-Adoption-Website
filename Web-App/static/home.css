@@ -92,7 +92,7 @@ h1 {
   padding: 5px;
 }
 
-.edit-pet-btn, .delete-pet-btn {
+.edit-pet-btn, .delete-pet-btn, .view-interests-btn {
   display: inline-block;
   width: 100%;
   font-weight: bold;

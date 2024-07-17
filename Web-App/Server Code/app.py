@@ -130,7 +130,7 @@ def register_page():
       return render_template("register.html", error = "An error has occured")
 
 
-@app.route("/home", methods = ["GET"]) # This is the home page NOTE: Should show all pets TODO
+@app.route("/home", methods = ["GET"]) # This is the home page TODO
 @login_required
 def home_page():
   if request.method == "GET":
