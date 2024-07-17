@@ -231,9 +231,16 @@ def delete_pet_page(pet_id):
     if delete_pet(pet_id):
       return redirect("/home")
     else:
-      render_template("error.html", error = "Invalid pet id")
+      render_template("error.html", error = "Pet was not successfully deleted")
       time.sleep(3)
       return redirect("/home")
+    
+@app.route("/view_pet/<int:pet_id>", methods = ["GET"]) # This is the view pet page TODO
+@login_required
+def view_pet_page(pet_id):
+  if request.method == "GET":
+    pet_properties = fetch(pet_id)
+    return render_template("view_pet.html", pet_properties = pet_properties)
 
 @app.route("/search", methods = ["GET", "POST"]) # This is the search page TODO
 @login_required
@@ -256,23 +263,27 @@ def search_page():
 
     return render_template("search.html", pets = search_results)
 
-@app.route("/submit_interest/<int:pet_id>", methods = ["GET", "POST"]) # This is the submit interest page TODO
+@app.route("/submit_interest/<int:pet_id>", methods = ["GET"]) # This is the submit interest page TODO
 @login_required
 def submit_interest_page(pet_id):
   if request.method == "GET":
     if submit_interest(session.get("user_id"), pet_id):
       return redirect("/home")
     else:
-      return render_template("error.html", error = "Invalid pet id")
+      render_template("error.html", error = "Interest was not successfully registered")
+      time.sleep(3)
+      return redirect("/home")
 
-@app.route("/delete_interest/<int:pet_id>", methods = ["GET", "POST"]) # This is the delete interest page TODO
+@app.route("/delete_interest/<int:pet_id>", methods = ["GET"]) # This is the delete interest page TODO
 @login_required
 def delete_interest_page(pet_id):
   if request.method == "GET":
     if delete_interest(session.get("user_id"), pet_id):
       return redirect("/home")
     else:
-      return render_template("error.html", error = "Invalid pet id")
+      render_template("error.html", error = "Interest was not successfully deleted")
+      time.sleep(3)
+      return redirect("/home")
 
 @app.route("/view_interest_pet/<int:pet_id>", methods = ["GET"]) # This is the view interest page TODO
 @login_required
