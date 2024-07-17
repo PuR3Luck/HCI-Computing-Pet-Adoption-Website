@@ -1,4 +1,5 @@
-from flask import Flask, session, render_template, redirect, request, url_for
+from flask import Flask, session, render_template, redirect, request
+from werkzeug.datastructures import FileStorage, MultiDict
 import uuid
 import sqlite3
 from user_fns import login, register, change_password, delete_account
@@ -8,6 +9,8 @@ from interest_submission_fns import submit_interest, delete_interest
 from view_interest import view_interest
 from decorators import login_required, sql_wrapper
 import time
+import base64
+import io
 
 app = Flask(__name__,template_folder='../templates', static_folder='../static')
 
@@ -130,7 +133,7 @@ def register_page():
       return render_template("register.html", error = "An error has occured")
 
 
-@app.route("/home", methods = ["GET"]) # This is the home page TODO
+@app.route("/home", methods = ["GET"]) # This is the home page
 @login_required
 def home_page():
   if request.method == "GET":
@@ -142,7 +145,7 @@ def home_page():
 
     return render_template("home.html", username = session.get("username"), pets = list_of_pets)
 
-@app.route("/change_password", methods = ["GET", "POST"]) # This is the change password page TODO
+@app.route("/change_password", methods = ["GET", "POST"]) # This is the change password page
 @login_required
 def change_password_page():
   if request.method == "GET":
@@ -153,11 +156,11 @@ def change_password_page():
     new_password = request.form["new_password"]
 
     if change_password(session.get("username"), prev_password, new_password):
-      return redirect("/successful_password_change")
+      return render_template("success.html", message = "Password has been changed successfully")
     else:
-      return render_template("change_password.html", error = "Invalid password")
+      return render_template("error.html", error = "Invalid password")
 
-@app.route("/delete_account", methods = ["GET", "POST"]) # This is the delete account page  TODO
+@app.route("/delete_account", methods = ["GET", "POST"]) # This is the delete account page
 @login_required
 def delete_account_page():
   if request.method == "GET":
@@ -168,9 +171,9 @@ def delete_account_page():
 
     if delete_account(session.get("username"), password):
       session.clear()
-      return redirect("/successful_account_deletion")
+      return render_template("success.html", message = "Account has been successfully deleted")
     else:
-      return render_template("delete_account.html", error = "Invalid password")
+      return render_template("error.html", error = "Invalid password")
 
 @app.route("/add_pet", methods = ["GET", "POST"])
 @login_required
@@ -194,11 +197,9 @@ def add_pet_page():
     if add_pet(owner_id = session.get("user_id"), name = name, age = age, fee = fee, writeup = writeup, sex = sex, type_id = type_id, photos = photos_lst):
       return redirect("/home")
     else:
-      render_template("add_pet.html", error = "An error has occured")
-      time.sleep(3)
-      redirect("/home")
+      return render_template("add_pet.html", error = "An error has occured")
 
-@app.route("/edit_pet/<int:pet_id>", methods = ["GET", "POST"]) # This is the edit pet page TODO
+@app.route("/edit_pet/<int:pet_id>", methods = ["GET", "POST"]) # This is the edit pet page
 @login_required
 def edit_pet_page(pet_id): #NOTE: Check for how to handle photos
   if request.method == "GET":
@@ -215,14 +216,35 @@ def edit_pet_page(pet_id): #NOTE: Check for how to handle photos
     writeup = request.form["writeup"]
     sex = request.form["sex"]
     type = request.form["type"]
-    photos = request.files
-    type_id = convert_type_str_to_id(type)
+    previous_photos = request.form.getlist("existing_photos")
+    photos = request.files.getlist("photos")
+
+    all_photos = []
+
+    for photo in photos:
+      if photo and photo.filename:
+        all_photos.append(photo)
+
+    for i, photo_base64 in enumerate(previous_photos):
+      if photo_base64:
+        photo_data = base64.b64decode(photo_base64)
+        photo_file = io.BytesIO(photo_data)
+
+        file_storage = FileStorage(
+          stream=photo_file,
+          filename=f'existing_photo_{i}.png',
+          content_type='image/png'
+        )
+
+        all_photos.append(file_storage)
+
+    photos = all_photos
+
+    type_id = convert_type_str_to_id(type)[0]
     if edit_pet(pet_id, name, age, fee, writeup, sex, type_id, photos):
-      return redirect("/home")
+      return render_template("success.html", message="Successfully edited pet details")
     else:
-      render_template("error.html", error="Failed to edit pet")
-      time.sleep(3)
-      return redirect("/home")
+      return render_template("error.html", error="Failed to edit pet")
 
 @app.route("/delete_pet/<int:pet_id>", methods = ["GET", "POST"]) # This is the delete pet page
 @login_required
@@ -231,9 +253,7 @@ def delete_pet_page(pet_id):
     if delete_pet(pet_id):
       return redirect("/home")
     else:
-      render_template("error.html", error = "Pet was not successfully deleted")
-      time.sleep(3)
-      return redirect("/home")
+      return render_template("error.html", error = "Pet was not successfully deleted")
     
 @app.route("/view_pet/<int:pet_id>", methods = ["GET"]) # This is the view pet page TODO
 @login_required
@@ -270,9 +290,7 @@ def submit_interest_page(pet_id):
     if submit_interest(session.get("user_id"), pet_id):
       return redirect("/home")
     else:
-      render_template("error.html", error = "Interest was not successfully registered")
-      time.sleep(3)
-      return redirect("/home")
+      return render_template("error.html", error = "Interest was not successfully registered")
 
 @app.route("/delete_interest/<int:pet_id>", methods = ["GET"]) # This is the delete interest page TODO
 @login_required
@@ -281,9 +299,7 @@ def delete_interest_page(pet_id):
     if delete_interest(session.get("user_id"), pet_id):
       return redirect("/home")
     else:
-      render_template("error.html", error = "Interest was not successfully deleted")
-      time.sleep(3)
-      return redirect("/home")
+      return render_template("error.html", error = "Interest was not successfully deleted")
 
 @app.route("/view_interest_pet/<int:pet_id>", methods = ["GET"]) # This is the view interest page TODO
 @login_required

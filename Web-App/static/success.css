@@ -9,13 +9,13 @@ body {
   text-align: center;
 }
 
-.error-message {
-  color:#ff0000;
+.success-message {
+  color:#57b52e;
   font-weight: 800;
   font-size: 280%;
 }
 
-.return-to-home-btn {
+ .return-to-home-btn {
   display: inline-block;
   margin: 20px;
   padding: 10px;

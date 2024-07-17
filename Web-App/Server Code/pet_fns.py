@@ -55,41 +55,20 @@ def edit_pet(cursor: sqlite3.Cursor, pet_id: int, name: str = None, age: int = N
     bool, True if the pet was successfully edited, False otherwise
   """
   try:
-    update_query = "UPDATE PET SET "
-    update_values = []
+    cursor.execute("""
+      UPDATE PET 
+      SET name = ?, age = ?, fee = ?, writeup = ?, sex = ?, type_id = ? 
+      WHERE pet_id = ?
+    """, (name, age, fee, writeup, sex, type_id, pet_id))
 
-    if name is not None:
-      update_query += "name = ?, "
-      update_values.append(name)
-
-    if age is not None:
-      update_query += "age = ?, "
-      update_values.append(age)
-
-    if fee is not None:
-      update_query += "fee = ?, "
-      update_values.append(fee)
-
-    if writeup is not None:
-      update_query += "writeup = ?, "
-      update_values.append(writeup)
-
-    if sex is not None:
-      update_query += "sex = ?, "
-      update_values.append(sex)
-
-    if type_id is not None:
-      update_query += "type_id = ?, "
-      update_values.append(type_id)
-
-    #NOTE: Photo updating currently does not work
     if photos is not None:
-      update_query += "photos = ?, "
-      update_values.append(photos)
+      cursor.execute("DELETE FROM PET_PHOTOS WHERE pet_id = ?", (pet_id, ))
 
-    update_query = update_query.rstrip(", ") + " WHERE pet_id = ?"
-    update_values.append(pet_id)
-    cursor.execute(update_query, tuple(update_values))
+      for file in photos:
+        if file and file.filename:
+          file_content = file.read()
+          cursor.execute("INSERT INTO PET_PHOTOS (pet_id, photo_blob) VALUES (?, ?)", (pet_id, sqlite3.Binary(file_content)))
+
     return True
   
   except sqlite3.Error as e:

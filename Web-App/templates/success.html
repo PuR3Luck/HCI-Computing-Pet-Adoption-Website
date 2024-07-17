@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Success</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename = 'success.css') }}">
+</head>
+<body>
+  <div class="success-message">
+    <h2>Success!</h2>
+    <p>Your action has been completed successfully.</p>
+    
+    <p>{{ message|safe }}</p>
+
+    <br>
+
+    <a href="{{ url_for('home_page')}}" class="return-to-home-btn">Back to Home</a>
+  </div>
+</body>
+</html>

@@ -1,75 +1,16 @@
 <!DOCTYPE html>
 
-<html>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    margin: 0;
-    padding: 20px;
-  }
-
-  h1 {
-    color: #333;
-    text-align: center;
-  }
-
-  label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-  }
-
-  .update-box {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 0 10px #ccc;
-    justify-content: center;
-    text-align: center;
-  }
-
-  .update-fields-box {
-     margin: 0 auto;
-     padding: 20px;
-     display: grid;
-     grid-template-columns: 1fr 2fr;
-     gap: 20px;
-     justify-content: space-between;
-   }
-
-   .text-box, .picture-box {
-    width: 100%;
-    display: inline-block;
-    vertical-align: top;
-    margin: 5px auto;
-    padding: 5px;
-    background-color: #fff;
-    border: 1px solid #3c3c3c;
-    border-radius: 5px;
-   }
-
-   .form-option-box {
-    margin: 5px auto;
-    padding: 5px;
-    background-color: #fff;
-    border: 1px solid #3c3c3c;
-    border-radius: 5px;
-    
-   }
-
-</style>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Edit Pet Details</title>
   <link rel="stylesheet" href="{{ url_for('static', filename = 'edit_pet.css') }}">
 </head>
 <body>
   <h1>Edit pet details</h1>
   <div class="update-box">
-  <form action="{{ url_for('edit_pet_page', pet_id=pet_properties.id) }}" method="POST" enctype="multipart/form-data"></form>
+  <form action="{{ url_for('edit_pet_page', pet_id=pet_properties.id) }}" method="POST" enctype="multipart/form-data">
     <div class="update-fields-box">
       <div class="text-box">
         <div class="form-option-box">
@@ -116,16 +57,14 @@
       <div class="picture-box">
         {% for photo in pet_properties.photos[:3] %}
         <img src="data:image/png;base64,{{ photo }}" alt="{{ pet_properties.name }}" width="250px" height="250px">
+        <input type="hidden" name="existing_photos" value="{{ photo }}">
         {% endfor %}
         <label for="photos">Photos:</label>
         <input type="file" id="photos" name="photos" accept="image/*" multiple>
       </div>
-
-      <br>
-
       
     </div>
-    <button type="submit">Update Pet</button>
+    <button type="submit" class="update-pet-btn">Update Pet Details</button>
   </form>
   </div>
 </body>

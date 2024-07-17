@@ -1,0 +1,73 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  color: #333;
+  text-align: center;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.update-box {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px #ccc;
+  justify-content: center;
+  text-align: center;
+}
+
+.update-fields-box {
+  margin: 0 auto;
+  padding: 20px;
+  padding-bottom: 5px;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.text-box, .picture-box {
+  width: 100%;
+  display: inline-block;
+  vertical-align: top;
+  margin: 5px auto;
+  padding: 5px;
+  background-color: #fff;
+  border: 2px solid #3c3c3c;
+  border-radius: 5px;
+}
+
+.form-option-box {
+  margin: 5px auto;
+  padding: 5px;
+  background-color: #fff;
+  border: 1px solid #3c3c3c;
+  border-radius: 5px;
+}
+
+.update-pet-btn {
+  display: block;
+  width: 200px;
+  margin: 5px auto;
+  padding: 10px;
+  background-color: #3498db;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bolder;
+  border: 2px solid;
+  border-color: #0f0f0f;
+}
