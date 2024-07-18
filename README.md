@@ -7,6 +7,7 @@
 - [ ] Submit interest
 - [ ] Delete interest
 - [ ] View interest
+- [ ] Refactor to use Flask's logging system
 
 ---
 

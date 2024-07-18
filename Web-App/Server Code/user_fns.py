@@ -1,6 +1,13 @@
 from decorators import sql_wrapper
 import sqlite3
 from pet_fns import delete_pet
+import dataclasses
+
+@dataclasses.dataclass
+class user_details:
+  user_id: int
+  username: str
+  contact_number: int
 
 @sql_wrapper
 def login(cursor:sqlite3.Cursor, username:str, input_password:str) -> bool:
@@ -122,3 +129,56 @@ def delete_account(cursor: sqlite3.Cursor, username:str, password:str):
     cursor.execute("DELETE FROM USER WHERE username = ?", (username,))
 
     return True
+
+@sql_wrapper
+def check_owner(cursor: sqlite3.Cursor, user_id:int, pet_id:int) -> bool:
+  """
+    Check if the user is the owner of the pet
+    
+    Args:
+      cursor: sqlite3 cursor object
+      user_id: int, the user_id of the user
+      pet_id: int, the pet_id of the pet
+
+    Returns:
+        bool, True if the user is the owner of the pet, False otherwise
+  """
+
+  pet_owner_id = cursor.execute("SELECT user_id FROM PET WHERE pet_id = ?", (pet_id,)).fetchone()[0]
+  return user_id == pet_owner_id
+
+@sql_wrapper
+def check_interest(cursor: sqlite3.Cursor, user_id:int, pet_id:int) -> bool:
+  """
+    Check if the users is interested in the pet
+    
+    Args:
+      cursor: sqlite3 cursor object
+      user_id: int, the user_id of the user
+      pet_id: int, the pet_id of the pet
+
+    Returns:
+        bool, True if the user is interested in the pet, False otherwise
+  """
+
+  if cursor.execute("SELECT * FROM INTERESTS WHERE user_id = ? AND pet_id = ?", (user_id, pet_id)).fetchone() is None:
+    return False
+  else:
+    return True
+  
+@sql_wrapper
+def get_user_details(cursor: sqlite3.Cursor, user_id:int) -> user_details:
+  """
+    Get the details of the user
+
+    Args:
+      cursor: sqlite3 cursor object
+      user_id: int, the user_id of the user
+
+    Returns:
+        user_details, a dataclass containing the details of the user
+  """
+
+  user_details_tuple = cursor.execute("SELECT username, contact_number FROM USER WHERE user_id = ?", (user_id,)).fetchone()
+
+  return user_details(user_id=user_id, username=user_details_tuple[0], contact_number=user_details_tuple[1])

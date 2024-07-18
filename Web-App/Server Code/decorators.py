@@ -13,11 +13,7 @@ def sql_wrapper(func: Callable):
     # Running the wrapped function
     try:
       result = func(cur, *args, **kwargs)
-      print("Function executed successfully")
-
       conn.commit()
-
-      print("Function committed successfully")
       return result
     
     except sqlite3.Error as e:

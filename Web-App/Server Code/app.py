@@ -2,10 +2,10 @@ from flask import Flask, session, render_template, redirect, request
 from werkzeug.datastructures import FileStorage, MultiDict
 import uuid
 import sqlite3
-from user_fns import login, register, change_password, delete_account
+from user_fns import login, register, change_password, delete_account, check_owner, check_interest, get_user_details
 from pet_fns import add_pet, edit_pet, delete_pet
 from search import search, filter_properties, convert_type_str_to_id, pet_properties, fetch
-from interest_submission_fns import submit_interest, delete_interest
+from interest_submission_fns import submit_interest, delete_interest, get_interests_in_pet
 from view_interest import view_interest
 from decorators import login_required, sql_wrapper
 import time
@@ -260,7 +260,10 @@ def delete_pet_page(pet_id):
 def view_pet_page(pet_id):
   if request.method == "GET":
     pet_properties = fetch(pet_id)
-    return render_template("view_pet.html", pet_properties = pet_properties)
+    is_owner = check_owner(session["user_id"], pet_id)
+    is_interested = check_interest(session["user_id"], pet_id)
+
+    return render_template("view_pet.html", pet_properties = pet_properties, is_owner = is_owner, is_interested = is_interested)
 
 @app.route("/search", methods = ["GET", "POST"]) # This is the search page TODO
 @login_required
@@ -300,14 +303,6 @@ def delete_interest_page(pet_id):
       return redirect("/home")
     else:
       return render_template("error.html", error = "Interest was not successfully deleted")
-
-@app.route("/view_interest_pet/<int:pet_id>", methods = ["GET"]) # This is the view interest page TODO
-@login_required
-def view_interest_page(pet_id):
-  if request.method == "GET":
-    interests = view_interest(pet_id)
-    return render_template("view_interest.html", interests = interests)
-
 
 @app.route("/test_error", methods = ["GET"]) # This is the test error page
 def test_error_page():
