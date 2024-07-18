@@ -2,12 +2,11 @@
 
 ## To Do
 
-- [ ] View pet page
+- [x] View pet page
+- [x] Submit interest
+- [x] Delete interest
+- [x] View interest
 - [ ] Search page
-- [ ] Submit interest
-- [ ] Delete interest
-- [ ] View interest
-- [ ] Refactor to use Flask's logging system
 
 ---
 

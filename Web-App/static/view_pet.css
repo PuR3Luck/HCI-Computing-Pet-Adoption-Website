@@ -1,0 +1,115 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  color: #333;
+  text-align: center;
+}
+
+.view-box {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px #ccc;
+  justify-content: center;
+  text-align: center;
+}
+
+.fields-box {
+  margin: 0 auto;
+  padding: 20px;
+  padding-bottom: 5px;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.text-box {
+  width: 100%;
+  display: inline-block;
+  vertical-align: top;
+  margin: 5px auto;
+  padding: 5px;
+  background-color: #fff;
+  border: 2px solid #3c3c3c;
+  border-radius: 5px;
+}
+
+.btn-box {
+  margin: 5px auto;
+  padding: 5px;
+  background-color: #fff;
+  border: 1px solid #3c3c3c;
+  border-radius: 5px;
+}
+
+.return-home-btn, .submit-interest-btn, .delete-interest-btn {
+  display: block;
+  width: 200px;
+  margin: 5px auto;
+  padding: 10px;
+  background-color: #3498db;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bolder;
+  border: 2px solid;
+  border-color: #0f0f0f;
+}
+
+.slider {
+  width: 100%;
+  margin: 5px auto;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid #3c3c3c;
+  border-radius: 5px;
+}
+
+.slide {
+  width: 100%;
+  max-width: 800px;
+  height: 350px;
+  position: absolute;
+  transition: all 0.5s;
+}
+
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.btn {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  border: none;
+  border-radius: 50%;
+  z-index: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  font-size: 18px;
+}
+.btn:active {
+  transform: scale(1.1);
+}
+.btn-prev {
+  top: 45%;
+  left: 2%;
+}
+
+.btn-next {
+  top: 45%;
+  right: 2%;
+}

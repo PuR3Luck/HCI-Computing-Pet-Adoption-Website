@@ -1,5 +1,5 @@
 from typing import Callable
-from flask import session, redirect
+from flask import session, redirect,logging
 import sqlite3
 import functools
 
@@ -13,7 +13,9 @@ def sql_wrapper(func: Callable):
     # Running the wrapped function
     try:
       result = func(cur, *args, **kwargs)
+      print(f"Executed function: {func.__name__} with args: {args} and kwargs: {kwargs}")
       conn.commit()
+      print("Committed changes to database")
       return result
     
     except sqlite3.Error as e:

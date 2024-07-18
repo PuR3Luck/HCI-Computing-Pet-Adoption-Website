@@ -263,7 +263,21 @@ def view_pet_page(pet_id):
     is_owner = check_owner(session["user_id"], pet_id)
     is_interested = check_interest(session["user_id"], pet_id)
 
-    return render_template("view_pet.html", pet_properties = pet_properties, is_owner = is_owner, is_interested = is_interested)
+    if is_owner:
+      id_list, success = get_interests_in_pet(pet_id)
+      print(id_list)
+      if not success:
+        return render_template("error.html", error = "An error has occured")
+      
+      detail_list = []
+
+      for id in id_list:
+        detail_list.append(get_user_details(id[0]))
+      print(detail_list)
+    else:
+      detail_list = None
+    
+    return render_template("view_pet.html", pet_properties = pet_properties, is_owner = is_owner, is_interested = is_interested, detail_list = detail_list)
 
 @app.route("/search", methods = ["GET", "POST"]) # This is the search page TODO
 @login_required
