@@ -7,7 +7,7 @@
 - [x] Delete interest
 - [x] View interest
 - [ ] Search page
-- [ ] Refactor view interests to use table
+- [x] Refactor view interests to use table
 
 ---
 
