@@ -61,8 +61,6 @@ th, td {
   margin: 5px auto;
   padding: 5px;
   background-color: #fff;
-  border: 1px solid #3c3c3c;
-  border-radius: 5px;
 }
 
 .return-home-btn, .submit-interest-btn, .delete-interest-btn {
