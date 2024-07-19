@@ -1,5 +1,5 @@
 from typing import Callable
-from flask import session, redirect,logging
+from flask import session, redirect
 import sqlite3
 import functools
 
