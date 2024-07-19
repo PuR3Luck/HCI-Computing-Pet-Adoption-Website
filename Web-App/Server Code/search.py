@@ -6,7 +6,7 @@ import base64
 
 @dataclasses.dataclass
 class filter_properties:
-  from_users: Optional[List[int]] = None# List of user ids
+  from_user: Optional[int] = None
   min_age: Optional[int] = None
   max_age: Optional[int] = None
   min_fee: Optional[int] = None
@@ -89,9 +89,8 @@ def search(cursor: sqlite3.Cursor, filters:filter_properties) -> List[int]:
  query = "SELECT pet_id FROM PET WHERE "
 
  # User filter
- if filters.from_users is not None:
-    add_string = "user_id IN (" + ",".join(str(user_id) for user_id in filters.from_users) + ") AND "
-    query += add_string
+ if filters.from_user is not None:
+    query += "user_id = " + str(filters.from_user) + " AND "
 
  # Age filter
  if filters.min_age is not None:

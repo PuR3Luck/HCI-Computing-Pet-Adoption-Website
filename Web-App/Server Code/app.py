@@ -1,14 +1,13 @@
-from flask import Flask, session, render_template, redirect, request
-from werkzeug.datastructures import FileStorage, MultiDict
+from flask import Flask, session, render_template, redirect, request 
 import uuid
+from werkzeug.datastructures import FileStorage
 import sqlite3
 from user_fns import login, register, change_password, delete_account, check_owner, check_interest, get_user_details
 from pet_fns import add_pet, edit_pet, delete_pet
-from search import search, filter_properties, convert_type_str_to_id, pet_properties, fetch
+from search import search, filter_properties, convert_type_str_to_id, fetch
 from interest_submission_fns import submit_interest, delete_interest, get_interests_in_pet
 from view_interest import view_interest
 from decorators import login_required, sql_wrapper
-import time
 import base64
 import io
 
@@ -137,7 +136,7 @@ def register_page():
 @login_required
 def home_page():
   if request.method == "GET":
-    user_pets_filter_properties = filter_properties(from_users = [session.get("user_id")])
+    user_pets_filter_properties = filter_properties(from_user = session.get("user_id"))
 
     user_pets = search(user_pets_filter_properties)
 
@@ -201,12 +200,12 @@ def add_pet_page():
 
 @app.route("/edit_pet/<int:pet_id>", methods = ["GET", "POST"]) # This is the edit pet page
 @login_required
-def edit_pet_page(pet_id): #NOTE: Check for how to handle photos
+def edit_pet_page(pet_id):
   if request.method == "GET":
     # Get pet properties
-    pet_properties = fetch(pet_id)
+    pet_properties_result = fetch(pet_id)
 
-    return render_template("edit_pet.html", pet_properties = pet_properties)
+    return render_template("edit_pet.html", pet_properties = pet_properties_result)
 
 
   if request.method == "POST":
@@ -259,7 +258,7 @@ def delete_pet_page(pet_id):
 @login_required
 def view_pet_page(pet_id):
   if request.method == "GET":
-    pet_properties = fetch(pet_id)
+    pet_properties_result = fetch(pet_id)
     is_owner = check_owner(session["user_id"], pet_id)
     is_interested = check_interest(session["user_id"], pet_id)
 
@@ -277,7 +276,7 @@ def view_pet_page(pet_id):
     else:
       detail_list = None
     
-    return render_template("view_pet.html", pet_properties = pet_properties, is_owner = is_owner, is_interested = is_interested, detail_list = detail_list)
+    return render_template("view_pet.html", pet_properties = pet_properties_result, is_owner = is_owner, is_interested = is_interested, detail_list = detail_list)
 
 @app.route("/search", methods = ["GET", "POST"]) # This is the search page TODO
 @login_required
@@ -287,7 +286,6 @@ def search_page():
   
   if request.method == "POST":
     search_properties =  filter_properties(
-      from_users = [request.form["from_users"]],
       min_age = request.form["min_age"],
       max_age = request.form["max_age"],
       min_fee = request.form["min_fee"],

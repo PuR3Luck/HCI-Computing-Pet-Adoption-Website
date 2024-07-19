@@ -56,11 +56,18 @@
         {% if not detail_list %}
           <p><strong>There are no parties interested in this pet currently</strong></p>
         {% else %}
-          <ul>
+          <table>
+            <tr>
+              <th>Name</th>
+              <th>Contact number</th>
+            </tr>
             {% for detail in detail_list %}
-              <li>Name: {{ detail.username }}, Contact number: {{ detail.contact_number }}</li>
+            <tr>
+              <td>{{ detail.username }}</td>
+              <td>{{ detail.contact_number }}</td>
+            </tr>
             {% endfor %}
-          </ul>
+          </table>
         {% endif %}
       {% endif %}
       
