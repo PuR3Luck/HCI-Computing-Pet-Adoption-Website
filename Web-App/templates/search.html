@@ -2,7 +2,102 @@
 
 <html lang="en">
 <style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 20px;
+  }
+
+  h1, h2 {
+    color: #333;
+    text-align: center;
+  }
+
+  .main-box {
+    padding: 10px;
+    max-width: 1200px;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    gap: 10px;
+    justify-content: space-between;
+  }
+
+  .filters-box {
+    border: 2px solid;
+    border-color: #3f3f3f;
+    border-radius: 5px;
+    padding: 10px;
+  }
   
+  .results-box {
+    border: 2px solid;
+    border-color: #3f3f3f;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-between;
+  }
+
+  .pet-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 10px;
+    width: 250px;
+  }
+
+  .pet-card:hover {
+  transform: translateY(-5px);
+  transform: scale(1.03);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.pet-card img {
+  width: 250px;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.pet-info {
+  margin-top: 10px;
+}
+
+.pet-name {
+  font-weight: bold;
+  font-size: 1.2em;
+  color: #4f5858;
+}
+
+.pet-details {
+  color: #4f5858;
+  font-size: 0.9em;
+}
+
+.pet-writeup {
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: #4f5858;
+}
+
+  .view-pet-btn {
+    display: block;
+    width: 200px;
+    margin: 5px auto;
+    padding: 10px;
+    background-color: #3498db;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bolder;
+    border: 2px solid;
+    border-color: #0f0f0f;
+  }
 </style>
 <head>
   <meta charset="UTF-8">
@@ -11,6 +106,77 @@
   <link rel="stylesheet" href="{{ url_for('static', filename = 'search.css') }}">
 </head>
 <body>
-  
+  <h1>Search for a pet</h1>
+  <div class="main-box">
+    <div class="filters-box">
+      <h2>Filters</h2>
+      <form action="url_for(search_page)" method="POST", enctype="multipart/form-data">
+        <label for="min-age">Minimum Age:</label>
+        <input type="number" id="min-age" name="min-age" min="0" max="30" step="1">
+
+        <br><br>
+
+        <label for="max-age">Maximum Age:</label>
+        <input type="number" id="max-age" name="max-age" min="0" max="30" step="1">
+
+        <br><br>
+
+        <label for="min-fee">Minimum Fee:</label>
+        <input type="number" id="min-fee" name="min-fee" step="0.01" min="0">
+
+        <br><br>
+
+        <label for="max-fee">Maximum Fee:</label>
+        <input type="number" id="max-fee" name="max-fee" step="0.01" min="0">
+
+        <br><br>
+
+        <label for="sex">Sex:</label>
+        <select id="sex" name="sex">
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value=None>Both</option>
+        </select>
+
+        <br><br>
+
+        <label for="type">Type:</label>
+        <select id="type" name="type">
+          <option value="Dog">Dog</option>
+          <option value="Cat">Cat</option>
+          <option value="Bird">Bird</option>
+          <option value="Fish">Fish</option>
+          <option value="Reptile">Reptile</option>
+          <option value="Other">Other</option>  
+          <option value=None>Any</option>
+        </select>
+      </form>
+    </div>
+
+    <div class="results-box">
+      {% for pet in pets %}
+      <div class="pet-card">
+        <img src="data:image/png;base64,{{ pet.photos[0] }}" alt="{{ pet.name }}">
+
+        <div class="pet-info">
+          <div class="pet-name">Name: {{ pet.name }}</div>
+          <div class="pet-details">
+            <p>Age: {{ pet.age }} years</p>
+            <p>Type: {{ pet.pet_type }}</p>
+            <p>Sex: {{ pet.sex | capitalize }}</p>
+            <p>Fee: ${{ pet.fee }}</p>
+          </div>
+
+          <div class="pet-writeup">
+            <p>{{ pet.writeup[:100] }}{% if pet.writeup|length > 100 %}...{% endif %}</p>
+          </div>
+
+          <div class="pet-actions">
+            <a href="url_for('view_pet_page', pet_id=pet.id)" class="view-pet-btn">View pet</a>
+          </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
 </body>
 </html>
