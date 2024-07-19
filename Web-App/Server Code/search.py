@@ -25,6 +25,11 @@ class pet_properties:
    pet_type: str
    photos: List[str]
 
+@dataclasses.dataclass
+class maximum_values:
+   age: int
+   price: int
+
 
 @sql_wrapper
 def convert_type_str_to_id(cursor: sqlite3.Cursor, type: str) -> Tuple[Optional[int], bool]:
@@ -73,56 +78,56 @@ def convert_type_id_to_str(cursor: sqlite3.Cursor, type_id: int) -> Tuple[Option
   
 @sql_wrapper
 def search(cursor: sqlite3.Cursor, filters:filter_properties) -> List[int]:
- """
-   Searches the database using the provided filter properties.
-
-   Operates by incrementally building a query based on the filter properties provided.
-
-   Args:
-     cursor (sqlite3.Cursor): The database cursor object.
-     filters (filter_properties): A dataclass containing the filter properties to use for the search.
-
-   Returns:
-     List[int]: A list of integers representing the pet IDs that match the search criteria.
- """
-
- query = "SELECT pet_id FROM PET WHERE "
-
- # User filter
- if filters.from_user is not None:
-    query += "user_id = " + str(filters.from_user) + " AND "
-
- # Age filter
- if filters.min_age is not None:
-    query += "age >= " + str(filters.min_age) + " AND "
- if filters.max_age is not None:
-    query += "age <= " + str(filters.max_age) + " AND "
-
- # Fee filter
- if filters.min_fee is not None:
-    query += "fee >= " + str(filters.min_fee) + " AND "
- if filters.max_fee is not None:
-    query += "fee <= " + str(filters.max_fee) + " AND "
-
- # Sex filter
- if filters.sex is not None:
-    query += "sex = '" + filters.sex + "' AND "
-
- # Type filter
- if filters.type is not None:
-    type_id, success = convert_type_str_to_id(cursor, filters.type)
-    if success:
-        query += "type_id = " + str(type_id)
-
- query = query.rstrip(" AND ") # Remove trailing " AND "
-
- cursor.execute(query)
-
- results = cursor.fetchall() # results is a list of tuples of ints
-
- pet_ids = [result[0] for result in results]
-
- return pet_ids
+  """
+    Searches the database using the provided filter properties.
+ 
+    Operates by incrementally building a query based on the filter properties provided.
+ 
+    Args:
+      cursor (sqlite3.Cursor): The database cursor object.
+      filters (filter_properties): A dataclass containing the filter properties to use for the search.
+ 
+    Returns:
+      List[int]: A list of integers representing the pet IDs that match the search criteria.
+  """
+ 
+  query = "SELECT pet_id FROM PET WHERE "
+ 
+  # User filter
+  if filters.from_user is not None:
+     query += "user_id = " + str(filters.from_user) + " AND "
+ 
+  # Age filter
+  if filters.min_age is not None:
+     query += "age >= " + str(filters.min_age) + " AND "
+  if filters.max_age is not None:
+     query += "age <= " + str(filters.max_age) + " AND "
+ 
+  # Fee filter
+  if filters.min_fee is not None:
+     query += "fee >= " + str(filters.min_fee) + " AND "
+  if filters.max_fee is not None:
+     query += "fee <= " + str(filters.max_fee) + " AND "
+ 
+  # Sex filter
+  if filters.sex is not None:
+     query += "sex = '" + filters.sex + "' AND "
+ 
+  # Type filter
+  if filters.type is not None:
+     type_id, success = convert_type_str_to_id(filters.type)
+     if success:
+         query += "type_id = " + str(type_id)
+ 
+  query = query.rstrip(" AND ") # Remove trailing " AND "
+ 
+  cursor.execute(query)
+ 
+  results = cursor.fetchall() # results is a list of tuples of ints
+ 
+  pet_ids = [result[0] for result in results]
+ 
+  return pet_ids
 
 @sql_wrapper
 def fetch(cursor: sqlite3.Cursor, pet_id: int) -> pet_properties:
@@ -157,6 +162,28 @@ def fetch(cursor: sqlite3.Cursor, pet_id: int) -> pet_properties:
     sex=pet_sex,
     pet_type=pet_type,
     photos=pet_photos
+  )
+
+  return return_value
+
+
+@sql_wrapper
+def get_maximum_values(cursor: sqlite3.Cursor) -> maximum_values:
+  """
+    Fetches the maximum values for age and fee from the database.
+  """
+  if cursor.execute("SELECT COUNT(*) FROM PET").fetchone()[0] == 0:
+    return maximum_values(
+      age=0,
+      price=0
+    )
+  
+  max_age = cursor.execute("SELECT MAX(age) FROM PET").fetchone()[0]
+  max_price = cursor.execute("SELECT MAX(fee) FROM PET").fetchone()[0]
+
+  return_value = maximum_values(
+    age=max_age,
+    price=max_price
   )
 
   return return_value

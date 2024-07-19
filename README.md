@@ -6,8 +6,10 @@
 - [x] Submit interest
 - [x] Delete interest
 - [x] View interest
-- [ ] Search page
+- [x] Search page
 - [x] Refactor view interests to use table
+- [ ] CSS for search page
+- [ ] Document code
 
 ---
 

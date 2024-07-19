@@ -16,11 +16,13 @@
 
   .main-box {
     padding: 10px;
-    max-width: 1200px;
-    display: grid;
-    grid-template-columns: 1fr 3fr;
+    max-width: 1400px;
+    display: flex;
     gap: 10px;
-    justify-content: space-between;
+    justify-content: start;
+    margin: auto;
+    width: 80%;
+    align-items: start;
   }
 
   .filters-box {
@@ -28,6 +30,7 @@
     border-color: #3f3f3f;
     border-radius: 5px;
     padding: 10px;
+    width: 275px;
   }
   
   .results-box {
@@ -38,7 +41,9 @@
     flex-direction: row;
     flex-wrap: wrap;
     gap: 10px;
-    justify-content: space-between;
+    justify-content: flex-start;
+    padding: 10px;
+    flex-grow: 1;
   }
 
   .pet-card {
@@ -46,7 +51,8 @@
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     padding: 10px;
-    width: 250px;
+    width: calc(100% - 20px);
+    max-width: 250px;
   }
 
   .pet-card:hover {
@@ -57,7 +63,7 @@
 }
 
 .pet-card img {
-  width: 250px;
+  width: 100%;
   height: 250px;
   object-fit: cover;
   border-radius: 8px;
@@ -86,7 +92,7 @@
 
   .view-pet-btn {
     display: block;
-    width: 200px;
+    width: 80%;
     margin: 5px auto;
     padding: 10px;
     background-color: #3498db;
@@ -98,6 +104,122 @@
     border: 2px solid;
     border-color: #0f0f0f;
   }
+
+  .slider-container {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  margin-top: 20px;
+}
+
+.slider-track {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  height: 5px;
+  background-color: #ddd;
+  border-radius: 5px;
+}
+
+.slider-range {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 5px;
+  background-color: #0468ab;
+  border-radius: 5px;
+}
+
+  /*
+    -webkit-slider-thumb and -moz-slider-thumb 
+    are used to ensure consistent experiences 
+    between different web browwers
+
+    -webkit-appearance: none is used to remove the 
+    default styling of sliders in the browser
+  */
+
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 5px;
+  background: transparent;
+  outline: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #3498db;
+  cursor: pointer;
+  border-radius: 50%;
+  pointer-events: auto;
+  border: #3f3f3f 2px solid;
+}
+
+.slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #3498db;
+  cursor: pointer;
+  border-radius: 50%;
+  pointer-events: auto;
+  border: #3f3f3f 2px solid;
+}
+
+.submit-btn {
+  font-size: large;
+  display: block;
+  width: 200px;
+  margin: 20px auto;
+  padding: 10px;
+  background-color: #3498db;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .main-box {
+    flex-direction: column;
+  }
+
+  .results-box {
+    justify-content: center;
+  }
+
+  .pet-card {
+    width: calc(100% - 20px);
+    max-width: none;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .pet-card {
+    width: calc(50% - 20px);
+  }
+}
+
+@media (min-width: 1025px) and (max-width: 1440px) {
+  .pet-card {
+    width: calc(33.33% - 20px);
+  }
+}
+
+@media (min-width: 1441px) {
+  .pet-card {
+    width: calc(25% - 20px);
+  }
+}
 </style>
 <head>
   <meta charset="UTF-8">
@@ -110,24 +232,26 @@
   <div class="main-box">
     <div class="filters-box">
       <h2>Filters</h2>
-      <form action="url_for(search_page)" method="POST", enctype="multipart/form-data">
-        <label for="min-age">Minimum Age:</label>
-        <input type="number" id="min-age" name="min-age" min="0" max="30" step="1">
+      <form action="{{ url_for('search_page') }}" method="POST", enctype="multipart/form-data">
+        <div class="slider-container">
+          <div class="slider-track"></div>
+          <div class="slider-range"></div>
+          <input type="range" id="min-age-slider" class="slider" min="0" max="{{ max_values.age }}" value="0">
+          <input type="range" id="max-age-slider" class="slider" min="0" max="{{ max_values.age }}" value="{{ max_values.age }}">
+        </div>
+        <p>Selected Age Range: <span id="min-age-value">0</span> - <span id="max-age-value">{{ max_values.age }}</span> years</p>
+        <input type="hidden" id="min-age" name="min-age" value="0">
+        <input type="hidden" id="max-age" name="max-age" value="{{ max_values.age }}">
 
-        <br><br>
-
-        <label for="max-age">Maximum Age:</label>
-        <input type="number" id="max-age" name="max-age" min="0" max="30" step="1">
-
-        <br><br>
-
-        <label for="min-fee">Minimum Fee:</label>
-        <input type="number" id="min-fee" name="min-fee" step="0.01" min="0">
-
-        <br><br>
-
-        <label for="max-fee">Maximum Fee:</label>
-        <input type="number" id="max-fee" name="max-fee" step="0.01" min="0">
+        <div class="slider-container">
+          <div class="slider-track"></div>
+          <div class="slider-range"></div>
+          <input type="range" id="min-fee-slider" class="slider" min="0" max="{{ max_values.price }}" value="0">
+          <input type="range" id="max-fee-slider" class="slider" min="0" max="{{ max_values.price }}" value="{{ max_values.price }}">
+        </div>
+        <p>Selected Fee Range: $<span id="min-fee-value">0</span> - $<span id="max-fee-value">{{ max_values.price }}</span></p>
+        <input type="hidden" id="min-fee" name="min-fee" value="0">
+        <input type="hidden" id="max-fee" name="max-fee" value="{{ max_values.price }}">
 
         <br><br>
 
@@ -150,6 +274,10 @@
           <option value="Other">Other</option>  
           <option value=None>Any</option>
         </select>
+
+        <br><br>
+
+        <button type="submit" class="submit-btn">Search</button>
       </form>
     </div>
 
@@ -175,8 +303,11 @@
             <a href="url_for('view_pet_page', pet_id=pet.id)" class="view-pet-btn">View pet</a>
           </div>
       </div>
+      </div>
       {% endfor %}
     </div>
   </div>
+
+  <script src="{{ url_for('static', filename='search.js') }}"></script>
 </body>
 </html>

@@ -4,9 +4,8 @@ from werkzeug.datastructures import FileStorage
 import sqlite3
 from user_fns import login, register, change_password, delete_account, check_owner, check_interest, get_user_details
 from pet_fns import add_pet, edit_pet, delete_pet
-from search import search, filter_properties, convert_type_str_to_id, fetch
+from search import search, filter_properties, convert_type_str_to_id, fetch, get_maximum_values
 from interest_submission_fns import submit_interest, delete_interest, get_interests_in_pet
-from view_interest import view_interest
 from decorators import login_required, sql_wrapper
 import base64
 import io
@@ -281,22 +280,28 @@ def view_pet_page(pet_id):
 @app.route("/search", methods = ["GET", "POST"]) # This is the search page TODO
 @login_required
 def search_page():
+  max_values = get_maximum_values()
+
   if request.method == "GET":
-    return render_template("search.html")
+    return render_template("search.html",  max_values = max_values)
   
   if request.method == "POST":
     search_properties =  filter_properties(
-      min_age = request.form["min_age"],
-      max_age = request.form["max_age"],
-      min_fee = request.form["min_fee"],
-      max_fee = request.form["max_fee"],
+      min_age = request.form["min-age"],
+      max_age = request.form["max-age"],
+      min_fee = request.form["min-fee"],
+      max_fee = request.form["max-fee"],
       sex = request.form["sex"],
       type = request.form["type"]
     )
 
+    # Get ids of pets that match the search criteria
     search_results = search(search_properties)
 
-    return render_template("search.html", pets = search_results)
+    # Get the pet properties for each pet id
+    list_of_pets = [fetch(pet_id) for pet_id in search_results]
+
+    return render_template("search.html", pets = list_of_pets, max_values = max_values)
 
 @app.route("/submit_interest/<int:pet_id>", methods = ["GET"]) # This is the submit interest page TODO
 @login_required
@@ -319,6 +324,10 @@ def delete_interest_page(pet_id):
 @app.route("/test_error", methods = ["GET"]) # This is the test error page
 def test_error_page():
   return render_template("error.html", error = "This is a test error page")
+
+@app.route("/debug", methods = ["GET","POST"]) # This is the debug page
+def debug():
+  return str(get_maximum_values())
 
 if __name__ == "__main__":
   app.run(debug=True)
