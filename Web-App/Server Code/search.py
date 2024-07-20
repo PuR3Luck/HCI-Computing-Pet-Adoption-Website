@@ -86,6 +86,7 @@ def search(cursor: sqlite3.Cursor, filters: filter_properties, exclude_user: boo
     Args:
       cursor (sqlite3.Cursor): The database cursor object.
       filters (filter_properties): A dataclass containing the filter properties to use for the search.
+      exclude_user (bool): A boolean indicating whether to exclude the user from the search results.
  
     Returns:
       List[int]: A list of integers representing the pet IDs that match the search criteria.

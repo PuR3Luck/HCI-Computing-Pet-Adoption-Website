@@ -324,6 +324,7 @@ def search_page():
       type_filter = request.form["type"]
     
     search_properties =  filter_properties(
+      from_user = session.get("user_id"),
       min_age = request.form["min-age"],
       max_age = request.form["max-age"],
       min_fee = request.form["min-fee"],
