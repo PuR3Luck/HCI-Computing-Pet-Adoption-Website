@@ -139,7 +139,7 @@ def home_page():
   if request.method == "GET":
     # Feth pet ids of user's pets
     user_pets_filter_properties = filter_properties(from_user = session.get("user_id"))
-    user_pets = search(user_pets_filter_properties)
+    user_pets = search(user_pets_filter_properties, exclude_user = False)
 
     # Fetch pet details of user's pets
     list_of_pets = [fetch(pet_id) for pet_id in user_pets]
@@ -333,7 +333,7 @@ def search_page():
     )
 
     # Get ids of pets that match the search criteria
-    search_results = search(search_properties)
+    search_results = search(search_properties, exclude_user = True)
 
     # Get the pet properties for each pet id
     list_of_pets = [fetch(pet_id) for pet_id in search_results]
