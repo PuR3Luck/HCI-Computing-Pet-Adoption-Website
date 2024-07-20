@@ -2,17 +2,8 @@
 
 ## To Do
 
-- [x] View pet page
-- [x] Submit interest
-- [x] Delete interest
-- [x] View interest
-- [x] Search page
-- [x] Refactor view interests to use table
-- [x] Get any (eg Both Genders, Any type of pet) filters to work
-- [x] Make sure that user's own pets do not show up in the search results
-- [x] Make it such that when search page loads all possible pets show up for adoption
-- [x] Document code
 - [ ] CSS for search page
+- [ ] Add ability to manually key in values for filters
 
 ---
 
