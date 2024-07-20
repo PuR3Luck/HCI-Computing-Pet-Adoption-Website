@@ -29,6 +29,8 @@ h1 {
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   padding: 10px;
   width: 250px;
+  border: 2px solid;
+  border-color: #c0c0c0;
 }
 
 .pet-card:hover {
@@ -43,8 +45,6 @@ h1 {
   height: 250px;
   object-fit: cover;
   border-radius: 8px;
-  border: 2px solid;
-  border-color: #c0c0c0;
 }
 
 .pet-info {
