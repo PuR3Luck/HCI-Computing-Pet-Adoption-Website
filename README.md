@@ -1,4 +1,6 @@
 # HCI-Computing-Pet-Adoption-Website
+## Context
+This was done as part of an assignent I had to learn how to use Flask. Thanks [notbowen](https://github.com/notbowen) for chilling in my VSCode Liveshare to answer my question and helping me with some of the difficult parts.
 
 ## Design Requirements
 - Design a web application for Pet Adoption.
