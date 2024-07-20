@@ -9,7 +9,9 @@
 - [x] Search page
 - [x] Refactor view interests to use table
 - [ ] CSS for search page
-- [ ] Document code
+- [x] Get any (eg Both Genders, Any type of pet) filters to work
+- [ ] Make sure that user's own pets do not show up in the search results
+- [x] Document code
 
 ---
 

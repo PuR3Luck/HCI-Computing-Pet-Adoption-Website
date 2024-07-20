@@ -141,6 +141,7 @@
   */
 
 .slider {
+  appearance: none;
   -webkit-appearance: none;
   width: 100%;
   height: 5px;
@@ -174,7 +175,7 @@
   border: #3f3f3f 2px solid;
 }
 
-.submit-btn {
+.submit-btn, .return-home-btn {
   font-size: large;
   display: block;
   width: 200px;
@@ -186,6 +187,8 @@
   text-decoration: none;
   border-radius: 5px;
   font-weight: bold;
+  border: 2px solid;
+  border-color: #3f3f3f;
 }
 
 @media (max-width: 768px) {
@@ -259,7 +262,7 @@
         <select id="sex" name="sex">
           <option value="Male">Male</option>
           <option value="Female">Female</option>
-          <option value=None>Both</option>
+          <option value="Any">Any</option>
         </select>
 
         <br><br>
@@ -272,13 +275,15 @@
           <option value="Fish">Fish</option>
           <option value="Reptile">Reptile</option>
           <option value="Other">Other</option>  
-          <option value=None>Any</option>
+          <option value="Any">Any</option>
         </select>
 
         <br><br>
 
         <button type="submit" class="submit-btn">Search</button>
       </form>
+
+      <a href="{{ url_for('home_page') }}" class="return-home-btn">Return to home</a>
     </div>
 
     <div class="results-box">

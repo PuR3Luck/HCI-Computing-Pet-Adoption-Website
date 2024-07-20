@@ -99,6 +99,7 @@ def login_page():
       user_id = cur.execute("SELECT user_id FROM USER WHERE username =?", (username,)).fetchone()[0]
       username = cur.execute("SELECT username FROM USER WHERE username =?", (username,)).fetchone()[0]
 
+      # Set session variables
       session['user_id'] = user_id
       session['username'] = username
 
@@ -120,6 +121,7 @@ def register_page():
     password = request.form["password"]
     contact_number = request.form["contact_number"]
 
+    # Enforce that contact number is an integer
     try:
       contact_number = int(contact_number)
     except TypeError:
@@ -135,10 +137,11 @@ def register_page():
 @login_required
 def home_page():
   if request.method == "GET":
+    # Feth pet ids of user's pets
     user_pets_filter_properties = filter_properties(from_user = session.get("user_id"))
-
     user_pets = search(user_pets_filter_properties)
 
+    # Fetch pet details of user's pets
     list_of_pets = [fetch(pet_id) for pet_id in user_pets]
 
     return render_template("home.html", username = session.get("username"), pets = list_of_pets)
@@ -168,6 +171,7 @@ def delete_account_page():
     password = request.form["password"]
 
     if delete_account(session.get("username"), password):
+      # Clear session variables to force user to log in again
       session.clear()
       return render_template("success.html", message = "Account has been successfully deleted")
     else:
@@ -196,6 +200,14 @@ def add_pet_page():
       return redirect("/home")
     else:
       return render_template("add_pet.html", error = "An error has occured")
+    
+@app.route("/logout", methods = ["GET"]) # This is the logout page
+@login_required
+def logout_page():
+  if request.method == "GET":
+    # Clear session variables to force user to log in again
+    session.clear()
+    return redirect("/login")
 
 @app.route("/edit_pet/<int:pet_id>", methods = ["GET", "POST"]) # This is the edit pet page
 @login_required
@@ -219,15 +231,20 @@ def edit_pet_page(pet_id):
 
     all_photos = []
 
+    # Add new photos to the list if they exist
     for photo in photos:
       if photo and photo.filename:
         all_photos.append(photo)
 
+    # Process existing photos from base64 strings
     for i, photo_base64 in enumerate(previous_photos):
       if photo_base64:
+        # Decode base64 string to binary data
         photo_data = base64.b64decode(photo_base64)
+        # Create a file-like object from the binary data
         photo_file = io.BytesIO(photo_data)
-
+        
+        # Create a FileStorage object to mimic uploaded file
         file_storage = FileStorage(
           stream=photo_file,
           filename=f'existing_photo_{i}.png',
@@ -238,7 +255,9 @@ def edit_pet_page(pet_id):
 
     photos = all_photos
 
+    # Convert type string to type id
     type_id = convert_type_str_to_id(type)[0]
+
     if edit_pet(pet_id, name, age, fee, writeup, sex, type_id, photos):
       return render_template("success.html", message="Successfully edited pet details")
     else:
@@ -248,7 +267,7 @@ def edit_pet_page(pet_id):
 @login_required
 def delete_pet_page(pet_id):
   if request.method == "GET":
-    if delete_pet(pet_id):
+    if delete_pet(pet_id): # Successfully deleted pet
       return redirect("/home")
     else:
       return render_template("error.html", error = "Pet was not successfully deleted")
@@ -257,18 +276,24 @@ def delete_pet_page(pet_id):
 @login_required
 def view_pet_page(pet_id):
   if request.method == "GET":
+    # Get pet properties
     pet_properties_result = fetch(pet_id)
+
+    # Check if user is owner of pet
     is_owner = check_owner(session["user_id"], pet_id)
+
+    # Check if user submitted interest in pet
     is_interested = check_interest(session["user_id"], pet_id)
 
     if is_owner:
+      # Get list of user_ids for users who have submitted interest in pet
       id_list, success = get_interests_in_pet(pet_id)
-      print(id_list)
       if not success:
         return render_template("error.html", error = "An error has occured")
       
       detail_list = []
-
+      
+      # Get user details for each user who has submitted interest in pet
       for id in id_list:
         detail_list.append(get_user_details(id[0]))
       print(detail_list)
@@ -280,19 +305,31 @@ def view_pet_page(pet_id):
 @app.route("/search", methods = ["GET", "POST"]) # This is the search page TODO
 @login_required
 def search_page():
+  # Get maximum age and price for search bars
   max_values = get_maximum_values()
 
   if request.method == "GET":
     return render_template("search.html",  max_values = max_values)
   
   if request.method == "POST":
+    # Handling "Any" values
+    if request.form["sex"] == "Any":
+      sex_filter = None
+    else:
+      sex_filter = request.form["sex"]
+
+    if request.form["type"] == "Any":
+      type_filter = None
+    else:
+      type_filter = request.form["type"]
+    
     search_properties =  filter_properties(
       min_age = request.form["min-age"],
       max_age = request.form["max-age"],
       min_fee = request.form["min-fee"],
       max_fee = request.form["max-fee"],
-      sex = request.form["sex"],
-      type = request.form["type"]
+      sex = sex_filter,
+      type = type_filter
     )
 
     # Get ids of pets that match the search criteria
@@ -307,7 +344,7 @@ def search_page():
 @login_required
 def submit_interest_page(pet_id):
   if request.method == "GET":
-    if submit_interest(session.get("user_id"), pet_id):
+    if submit_interest(session.get("user_id"), pet_id): # Successfully registered interest
       return redirect("/home")
     else:
       return render_template("error.html", error = "Interest was not successfully registered")
@@ -316,7 +353,7 @@ def submit_interest_page(pet_id):
 @login_required
 def delete_interest_page(pet_id):
   if request.method == "GET":
-    if delete_interest(session.get("user_id"), pet_id):
+    if delete_interest(session.get("user_id"), pet_id): # Successfully deleted interest
       return redirect("/home")
     else:
       return render_template("error.html", error = "Interest was not successfully deleted")
