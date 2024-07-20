@@ -43,7 +43,7 @@
     gap: 10px;
     justify-content: flex-start;
     padding: 10px;
-    flex-grow: 1;
+    width: 845px;
   }
 
   .pet-card {
@@ -177,10 +177,11 @@
   border: #3f3f3f 2px solid;
 }
 
-.submit-btn, .return-home-btn {
+.btn {
   font-size: large;
   display: block;
-  width: 200px;
+  width: 80%;
+  max-width: 200px;
   margin: 20px auto;
   padding: 10px;
   background-color: #3498db;
@@ -193,36 +194,16 @@
   border-color: #3f3f3f;
 }
 
-@media (max-width: 768px) {
-  .main-box {
-    flex-direction: column;
-  }
-
-  .results-box {
-    justify-content: center;
-  }
-
-  .pet-card {
-    width: calc(100% - 20px);
-    max-width: none;
-  }
+.limit-btn {
+  font-size: small;
+  padding: 5px;
+  width: 160px;
+  margin: 10px auto;
 }
 
-@media (min-width: 769px) and (max-width: 1024px) {
+@media screen and (max-width: 1600px) {
   .pet-card {
-    width: calc(50% - 20px);
-  }
-}
-
-@media (min-width: 1025px) and (max-width: 1440px) {
-  .pet-card {
-    width: calc(33.33% - 20px);
-  }
-}
-
-@media (min-width: 1441px) {
-  .pet-card {
-    width: calc(25% - 20px);
+    width: 243px;
   }
 }
 </style>
@@ -247,6 +228,12 @@
         <p>Selected Age Range: <span id="min-age-value">0</span> - <span id="max-age-value">{{ max_values.age }}</span> years</p>
         <input type="hidden" id="min-age" name="min-age" value="0">
         <input type="hidden" id="max-age" name="max-age" value="{{ max_values.age }}">
+        <label for="age-range">Age Range:</label>
+        <div class="range-inputs">
+          <input type="number" id="age-min-limit" value="0" min="0"> - 
+          <input type="number" id="age-max-limit" value="{{ max_values.age }}" min="0">
+          <button class="btn limit-btn" type="button" onclick="updateAgeLimits()">Update Age Limits</button>
+        </div>
 
         <div class="slider-container">
           <div class="slider-track"></div>
@@ -257,6 +244,12 @@
         <p>Selected Fee Range: $<span id="min-fee-value">0</span> - $<span id="max-fee-value">{{ max_values.price }}</span></p>
         <input type="hidden" id="min-fee" name="min-fee" value="0">
         <input type="hidden" id="max-fee" name="max-fee" value="{{ max_values.price }}">
+        <label for="fee-range">Fee Range:</label>
+        <div class="range-inputs">
+          <input type="number" id="fee-min-limit" value="0" min="0"> - 
+          <input type="number" id="fee-max-limit" value="{{ max_values.price }}" min="0">
+          <button class="btn limit-btn" type="button" onclick="updateFeeLimits()">Update Fee Limits</button>
+        </div>
 
         <br><br>
 
@@ -282,10 +275,10 @@
 
         <br><br>
 
-        <button type="submit" class="submit-btn">Search</button>
+        <button type="submit" class="btn">Search</button>
       </form>
 
-      <a href="{{ url_for('home_page') }}" class="return-home-btn">Return to home</a>
+      <a href="{{ url_for('home_page') }}" class="btn">Return to home</a>
     </div>
 
     <div class="results-box">
@@ -307,7 +300,7 @@
           </div>
 
           <div class="pet-actions">
-            <a href="{{ url_for('view_pet_page', pet_id=pet.id) }}" class="view-pet-btn">View pet</a>
+            <a href="{{ url_for('view_pet_page', pet_id=pet.id) }}" class="btn">View pet</a>
           </div>
       </div>
       </div>

@@ -1,12 +1,5 @@
 # HCI-Computing-Pet-Adoption-Website
 
-## To Do
-
-- [ ] CSS for search page
-- [ ] Add ability to manually key in values for filters
-
----
-
 ## Design Requirements
 - Design a web application for Pet Adoption.
 - The web application will allow adoption of pet (eg. Dog, cat, etc)
