@@ -77,7 +77,7 @@ def convert_type_id_to_str(cursor: sqlite3.Cursor, type_id: int) -> Tuple[Option
 
   
 @sql_wrapper
-def search(cursor: sqlite3.Cursor, filters:filter_properties) -> List[int]:
+def search(cursor: sqlite3.Cursor, filters: filter_properties, exclude_user: bool) -> List[int]:
   """
     Searches the database using the provided filter properties.
  
@@ -95,29 +95,32 @@ def search(cursor: sqlite3.Cursor, filters:filter_properties) -> List[int]:
  
   # User filter
   if filters.from_user is not None:
-     query += "user_id = " + str(filters.from_user) + " AND "
+    if exclude_user:
+      query += "NOT user_id = " + str(filters.from_user) + " AND "
+    else:
+      query += "user_id = " + str(filters.from_user) + " AND "
  
   # Age filter
   if filters.min_age is not None:
-     query += "age >= " + str(filters.min_age) + " AND "
+    query += "age >= " + str(filters.min_age) + " AND "
   if filters.max_age is not None:
-     query += "age <= " + str(filters.max_age) + " AND "
+    query += "age <= " + str(filters.max_age) + " AND "
  
   # Fee filter
   if filters.min_fee is not None:
-     query += "fee >= " + str(filters.min_fee) + " AND "
+    query += "fee >= " + str(filters.min_fee) + " AND "
   if filters.max_fee is not None:
-     query += "fee <= " + str(filters.max_fee) + " AND "
+    query += "fee <= " + str(filters.max_fee) + " AND "
  
   # Sex filter
   if filters.sex is not None:
-     query += "sex = '" + filters.sex + "' AND "
+    query += "sex = '" + filters.sex + "' AND "
  
   # Type filter
   if filters.type is not None:
-     type_id, success = convert_type_str_to_id(filters.type)
-     if success:
-         query += "type_id = " + str(type_id)
+    type_id, success = convert_type_str_to_id(filters.type)
+    if success:
+        query += "type_id = " + str(type_id)
  
   query = query.rstrip(" AND ") # Remove trailing " AND "
  

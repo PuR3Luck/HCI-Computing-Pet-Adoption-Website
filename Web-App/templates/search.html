@@ -260,22 +260,22 @@
 
         <label for="sex">Sex:</label>
         <select id="sex" name="sex">
+          <option value="Any">Any</option>
           <option value="Male">Male</option>
           <option value="Female">Female</option>
-          <option value="Any">Any</option>
         </select>
 
         <br><br>
 
         <label for="type">Type:</label>
         <select id="type" name="type">
+          <option value="Any">Any</option>
           <option value="Dog">Dog</option>
           <option value="Cat">Cat</option>
           <option value="Bird">Bird</option>
           <option value="Fish">Fish</option>
           <option value="Reptile">Reptile</option>
-          <option value="Other">Other</option>  
-          <option value="Any">Any</option>
+          <option value="Other">Other</option>
         </select>
 
         <br><br>
@@ -305,7 +305,7 @@
           </div>
 
           <div class="pet-actions">
-            <a href="url_for('view_pet_page', pet_id=pet.id)" class="view-pet-btn">View pet</a>
+            <a href="{{ url_for('view_pet_page', pet_id=pet.id) }}" class="view-pet-btn">View pet</a>
           </div>
       </div>
       </div>
