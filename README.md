@@ -8,11 +8,11 @@
 - [x] View interest
 - [x] Search page
 - [x] Refactor view interests to use table
-- [ ] CSS for search page
 - [x] Get any (eg Both Genders, Any type of pet) filters to work
-- [ ] Make sure that user's own pets do not show up in the search results
-- [ ] Make it such that when search page loads all possible pets show up for adoption
+- [x] Make sure that user's own pets do not show up in the search results
+- [x] Make it such that when search page loads all possible pets show up for adoption
 - [x] Document code
+- [ ] CSS for search page
 
 ---
 

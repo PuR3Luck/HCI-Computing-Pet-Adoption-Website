@@ -137,7 +137,7 @@ def register_page():
 @login_required
 def home_page():
   if request.method == "GET":
-    # Feth pet ids of user's pets
+    # Fetch pet ids of user's pets
     user_pets_filter_properties = filter_properties(from_user = session.get("user_id"))
     user_pets = search(user_pets_filter_properties, exclude_user = False)
 
@@ -309,7 +309,14 @@ def search_page():
   max_values = get_maximum_values()
 
   if request.method == "GET":
-    return render_template("search.html",  max_values = max_values)
+    # Fetch pet ids of all pets other  than user's pets
+    user_pets_filter_properties = filter_properties(from_user = session.get("user_id"))
+    user_pets = search(user_pets_filter_properties, exclude_user = True)
+
+    # Fetch pet details of user's pets
+    list_of_pets = [fetch(pet_id) for pet_id in user_pets]
+
+    return render_template("search.html", pets = list_of_pets, max_values = max_values)
   
   if request.method == "POST":
     # Handling "Any" values
