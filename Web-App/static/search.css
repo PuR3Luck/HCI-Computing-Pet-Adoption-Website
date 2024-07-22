@@ -1,0 +1,204 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 20px;
+}
+
+h1, h2 {
+  color: #333;
+  text-align: center;
+}
+
+.main-box {
+  padding: 10px;
+  max-width: 1400px;
+  display: flex;
+  gap: 10px;
+  justify-content: start;
+  margin: auto;
+  width: 80%;
+  align-items: start;
+}
+
+.filters-box {
+  border: 2px solid;
+  border-color: #3f3f3f;
+  border-radius: 5px;
+  padding: 10px;
+  width: 275px;
+}
+  
+.results-box {
+  border: 2px solid;
+  border-color: #3f3f3f;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-start;
+  padding: 10px;
+  width: 845px;
+}
+
+.pet-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 10px;
+  width: calc(100% - 20px);
+  max-width: 250px;
+  border: 2px solid;
+  border-color: #c0c0c0;
+}
+
+.pet-card:hover {
+  transform: translateY(-5px);
+  transform: scale(1.03);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.pet-card img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.pet-info {
+  margin-top: 10px;
+}
+
+.pet-name {
+  font-weight: bold;
+  font-size: 1.2em;
+  color: #4f5858;
+}
+
+.pet-details {
+  color: #4f5858;
+  font-size: 0.9em;
+}
+
+.pet-writeup {
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: #4f5858;
+}
+
+.view-pet-btn {
+  display: block;
+  width: 80%;
+  margin: 5px auto;
+  padding: 10px;
+  background-color: #3498db;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bolder;
+  border: 2px solid;
+  border-color: #0f0f0f;
+}
+
+  .slider-container {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  margin-top: 20px;
+}
+
+.slider-track {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  height: 5px;
+  background-color: #ddd;
+  border-radius: 5px;
+}
+
+.slider-range {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 5px;
+  background-color: #0468ab;
+  border-radius: 5px;
+}
+
+/*
+  -webkit-slider-thumb and -moz-slider-thumb 
+  are used to ensure consistent experiences 
+  between different web browwers
+  
+  -webkit-appearance: none is used to remove the 
+  default styling of sliders in the browser
+*/
+
+.slider {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  height: 5px;
+  background: transparent;
+  outline: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #3498db;
+  cursor: pointer;
+  border-radius: 50%;
+  pointer-events: auto;
+  border: #3f3f3f 2px solid;
+}
+
+.slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #3498db;
+  cursor: pointer;
+  border-radius: 50%;
+  pointer-events: auto;
+  border: #3f3f3f 2px solid;
+}
+
+.btn {
+  font-size: large;
+  display: block;
+  width: 80%;
+  max-width: 200px;
+  margin: 20px auto;
+  padding: 10px;
+  background-color: #3498db;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  border: 2px solid;
+  border-color: #3f3f3f;
+}
+
+.limit-btn {
+  font-size: small;
+  padding: 5px;
+  width: 160px;
+  margin: 10px auto;
+}
+
+@media screen and (max-width: 1600px) {
+  .pet-card {
+    width: 243px;
+  }
+}
